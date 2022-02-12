@@ -83,3 +83,7 @@ document.addEventListener('keydown', e => {
     }
   }
 });
+setTimeout(
+  () => document.body.removeChild(document.getElementById('splash-screen')),
+  1000
+);
