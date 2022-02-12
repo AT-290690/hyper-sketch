@@ -2,9 +2,12 @@ import { CodeMirror } from './libs/editor/cell.editor.bundle.js';
 import cell from './parser/cell.js';
 import { std, processing, consoleElement } from './extentions/dna.js';
 import { execute } from './commands/exec.js';
-export const editor = CodeMirror(document.getElementById('main-container'), {});
+export const editor = CodeMirror(
+  document.getElementById('editor-container'),
+  {}
+);
 editor.changeFontSize('12px');
-editor.setSize(window.innerWidth, window.innerHeight - 80);
+editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
 let P5;
 const updateP5 = () => {
   if (P5) {
@@ -17,18 +20,10 @@ const updateP5 = () => {
 //  invoke: (inst, method, ...args) => inst[method](...args)
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.has('sketch')) {
-  editor.setValue(
-    LZUTF8.decompress(window.location.search.split('?sketch=')[1].trim(), {
-      inputEncoding: 'Base64',
-      outputEncoding: 'String'
-    })
-      .split(':=')
-      .join('\n:=')
-      .split(';')
-      .map(x => (x.includes('->') ? '\n' + x : x))
-      .join('; ')
-    // .match(/([^()]+|[^(]+\([^)]*\)[^()]*)/g).map(x=>x.length > 1 ? '\n' + x : 'x')
-  );
+  editor.setValue(window.location.search.split('?sketch=')[1].trim());
+  execute({ value: 'decode' });
+  // .match(/([^()]+|[^(]+\([^)]*\)[^()]*)/g).map(x=>x.length > 1 ? '\n' + x : 'x')
+
   window.history.pushState({}, document.title, window.location.pathname);
 } else {
   editor.setValue(`
@@ -48,7 +43,7 @@ window.addEventListener('resize', () => {
     canvasContainer.style.display = 'none';
     canvasContainer.innerHTML = '';
   }
-  editor.setSize(window.innerWidth, window.innerHeight - 80);
+  editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
 });
 
 document.addEventListener('keydown', e => {
@@ -58,7 +53,7 @@ document.addEventListener('keydown', e => {
     e.preventDefault();
     e.stopPropagation();
     updateP5();
-    editor.setSize(window.innerWidth, window.innerHeight - 80);
+    editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
     canvasContainer.style.display = 'none';
     canvasContainer.innerHTML = '';
     // consoleElement.style.visibility = 'hidden';
@@ -76,11 +71,11 @@ document.addEventListener('keydown', e => {
       canvasContainer.style.display = 'none';
       canvasContainer.innerHTML = '';
       consoleElement.style.height = `${window.innerHeight / 2 + 40}px`;
-      editor.setSize(window.innerWidth, window.innerHeight / 2 - 80);
+      editor.setSize(window.innerWidth - 15, window.innerHeight / 2 - 80);
     } else {
       consoleElement.style.height = `50px`;
       canvasContainer.style.display = 'block';
-      editor.setSize(window.innerWidth, window.innerHeight - 80);
+      editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
     }
   } else if (e.key === 'Enter') {
     if (activeElement === consoleElement) {
@@ -88,12 +83,3 @@ document.addEventListener('keydown', e => {
     }
   }
 });
-// .match(/([^()]+|[^(]+\([^)]*\)[^()]*)/g)
-// else if (e.key === 'Escape') {
-//   if (activeElement === consoleElement) {
-//     e.preventDefault();
-//     editor.focus();
-//   } else {
-//     consoleElement.focus();
-//   }
-// }

@@ -3,11 +3,11 @@
   --comment: #546a90;
   --linenumbers: #546a90;
   --border: #546a90;
-  --background-primary: #000000;
-  --background-secondary: #a875ff60;
-  --color-primary: #fbf5f3;
+  --background-primary: #161616;
+  --background-secondary: #ff4a9860;
+  --color-primary: #0afafa;
   --color-secondary: #42c6ff;
-  --color-thirdly: #b490f1;
+  --color-thirdly: #ff4a98;
   --color-fourtly: #ffce2e;
   --color-fiftly: #2eff85;
   --gutters-border: 1px solid transparent;
@@ -17,11 +17,11 @@
   --success: #00ff00;
   --icons: #fbf5f3;
   --progress: #42c6ff;
-  --def: #42c6ff;
-  --atom: #27ec4f;
-  --number: #ff57b9;
-  --string: #27ec4f;
-  --keyword: #b490f1;
+  --def: #3a8cc7;
+  --atom: #ff57b9;
+  --number: #ff4a98;
+  --string: #ff4a98;
+  --keyword: #7f83ff;
   --font-family: 'Fira Code';
 }
 
@@ -86,5 +86,12 @@ main {
   outline: none;
   border: none;
   height: 50px;
+  width: 90vw;
   resize: none;
+  position: absolute;
+  bottom: 0;
+}
+#main-container {
+  display: flex;
+  justify-content: space-between;
 }

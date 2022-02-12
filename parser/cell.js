@@ -142,6 +142,10 @@ specialForms[':='] = function (args, env) {
     printErrors('Bad use of :=');
     throw new SyntaxError('Bad use of :=');
   }
+  if (args[0].name[0] !== '$') {
+    printErrors('Variable names like (' + args[0].name + ') must start with $');
+    throw new SyntaxError('Variable names must start with $');
+  }
   let value = evaluate(args[1], env);
   env[args[0].name] = value;
   return value;
@@ -182,6 +186,7 @@ specialForms['='] = function (args, env) {
     printErrors('Bad use of =');
     throw new SyntaxError('Bad use of =');
   }
+
   const valName = args[0].name;
   const value = evaluate(args[1], env);
   for (let scope = env; scope; scope = Object.getPrototypeOf(scope)) {

@@ -1,6 +1,6 @@
 import { array, object, bitwise, print } from './mutations.js';
 import { VOID } from '../parser/cell.js';
-import { p5_constants, p5_remap } from './p5_remapping.js';
+import { p5_constants, p5_remap } from './p5_remapping.min.js';
 import { canvasContainer, editor } from '../main.js';
 export const consoleElement = document.getElementById('console');
 export const printErrors = errors => {
@@ -88,7 +88,7 @@ export const processing = engine => ({
   setup: fn => (engine.setup = fn),
   createCanvas: (w = window.innerWidth / 2, h = window.innerHeight - 82) => {
     canvasContainer.style.display = 'block';
-    editor.setSize(window.innerWidth / 2 - 10, window.innerHeight - 80);
+    editor.setSize(window.innerWidth / 2 - 15, window.innerHeight - 80);
     const canvas = engine.createCanvas(w, h);
     canvas.parent('canvas-container');
   },
