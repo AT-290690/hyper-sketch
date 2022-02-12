@@ -1,0 +1,90 @@
+:root {
+  --gutters: #000000;
+  --comment: #546a90;
+  --linenumbers: #546a90;
+  --border: #546a90;
+  --background-primary: #000000;
+  --background-secondary: #a875ff60;
+  --color-primary: #fbf5f3;
+  --color-secondary: #42c6ff;
+  --color-thirdly: #b490f1;
+  --color-fourtly: #ffce2e;
+  --color-fiftly: #2eff85;
+  --gutters-border: 1px solid transparent;
+  --border-width: 1px;
+  --error: #ff0000;
+  --warning: #ffed2b;
+  --success: #00ff00;
+  --icons: #fbf5f3;
+  --progress: #42c6ff;
+  --def: #42c6ff;
+  --atom: #27ec4f;
+  --number: #ff57b9;
+  --string: #27ec4f;
+  --keyword: #b490f1;
+  --font-family: 'Fira Code';
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url(assets/fonts/FiraCode-Regular.ttf) format('truetype');
+  font-display: swap;
+}
+/* 
+@font-face {
+  font-family: 'Apple';
+  src: url(assets/fonts/Apple.ttf) format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hermit-Regular';
+  src: url(assets/fonts/Hermit-Regular.otf) format('opentype');
+  font-display: swap;
+} */
+canvas {
+  width: 50vw;
+  border: solid 1px var(--border);
+}
+
+body {
+  background-color: var(--background-primary);
+}
+main {
+  display: none;
+}
+.CodeMirror {
+  width: 100%;
+}
+
+.success_line,
+.error_line,
+.info_line,
+.warn_line {
+  position: absolute;
+  resize: vertical;
+  width: 98%;
+  z-index: 5;
+  font-family: var(--font-family);
+  font-style: normal;
+  letter-spacing: -0.05em;
+  background-color: var(--background-primary);
+  /* visibility: hidden; */
+  padding: 5px;
+  padding-inline-start: 10px;
+}
+
+.error_line {
+  /* border: var(--border-width) solid #ff275d; */
+  color: #ff275d;
+}
+.info_line {
+  border: var(--border-width) solid var(--comment);
+  color: var(--color-primary);
+}
+#console {
+  outline: none;
+  border: none;
+  height: 50px;
+  resize: none;
+}
