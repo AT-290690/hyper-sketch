@@ -19,7 +19,9 @@ export const std = {
   includes: (string, target) => string.includes(target),
   ...bitwise,
   ...array,
-  ...object
+  ...object,
+  setTimeout: (fn, ms) => setTimeout(() => fn(), ms),
+  clearTimeout: id => clearTimeout(id)
 };
 
 export const processing = engine => ({
@@ -90,7 +92,7 @@ export const processing = engine => ({
   setup: fn => (engine.setup = fn),
   createCanvas: (w = window.innerWidth / 2, h = window.innerHeight - 82) => {
     canvasContainer.style.display = 'block';
-    editor.setSize(window.innerWidth / 2 - 15, window.innerHeight - 80);
+    editor.setSize(window.innerWidth / 2 - 15);
     const canvas = engine.createCanvas(w, h);
     canvas.parent('canvas-container');
   },

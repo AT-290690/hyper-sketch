@@ -1,5 +1,5 @@
 import { printErrors } from '../extentions/dna.js';
-import { editor, deps } from '../main.js';
+import { editor, State } from '../main.js';
 import { DEPENDENCY_LIST } from '../extentions/dependencies.js';
 
 export const execute = CONSOLE => {
@@ -91,11 +91,14 @@ export const execute = CONSOLE => {
 
       editor.setValue(
         matcher
-          .split(':=(')
-          .join('\n:=(')
-          .split(';')
-          .map(x => (x.includes('->') ? '\n' + x : x))
-          .join('; ')
+        // .split('')
+        // .map((x, i) => ((i + 1) % 85 === 0 ? x + '\n' : x))
+        // .join('')
+        // .split(':=(')
+        // .join('\n:=(')
+        // .split(';')
+        // .map(x => (x.includes('->') ? '\n' + x : x))
+        // .join('; ')
       );
       CONSOLE.value = '';
       return;
@@ -111,7 +114,7 @@ export const execute = CONSOLE => {
     case 'UPDATE_DEPENDENCY_LIST': {
       console.log(
         JSON.stringify(
-          [...new Set(Object.keys(deps.list).map(x => x.replace('.', '')))]
+          [...new Set(Object.keys(State.list).map(x => x.replace('.', '')))]
             .filter(x => x.length > 1)
             .sort((a, b) => (a.length > b.length ? 1 : -1))
             .reduce((acc, item, index) => {
@@ -120,6 +123,27 @@ export const execute = CONSOLE => {
             }, {})
         )
       );
+      return;
+    }
+    case 'CLEAR': {
+      window.history.pushState({}, document.title, window.location.pathname);
+      editor.setValue('');
+      CONSOLE.value = '';
+      return;
+    }
+    case 'RESET': {
+      window.history.pushState({}, document.title, window.location.pathname);
+      editor.setValue(`
+setup(-> (
+  |> (
+    ;; createCanvas ();
+))); 
+  
+draw (-> (
+  |> (
+    ;; background (30);
+)));`);
+      CONSOLE.value = '';
       return;
     }
   }

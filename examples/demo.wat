@@ -6,3 +6,13 @@
 assign ($arr; 2; 10);
 addAtEnd ($arr; removeFromStart ($arr));
 print ($obj; map ($arr; -> (x; i; a; * (x; *(x; ++(i))))));
+
+:= ($toggle; -> (=($trace; !($trace))));
+:= ($recursiveToggle; -> (time;
+setTimeout (-> (
+ |> (
+     $toggle();
+     $recursiveToggle(time);
+ )
+); time)
+));

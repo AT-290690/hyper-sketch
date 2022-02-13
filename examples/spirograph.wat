@@ -1,11 +1,8 @@
-;; @name Spirograph
-;; @description This sketch uses simple transformations to create a
+;; Spirograph
+;; This sketch uses simple transformations to create a
 ;; Spirograph-like effect with interlocking circles (called sines).
-;; Press the spacebar to switch between tracing and showing the underlying geometry.<br>
-;; Example created by <a href='http://lukedubois.com/' target='_blank'>R. Luke DuBois</a>.<br>
-;; <a href='http://en.wikipedia.org/wiki/Spirograph'>http://en.wikipedia.org/wiki/Spirograph</a>
 
-:= ($NUMSINES; 20); ;; how many of these things can we do at once?
+:= ($NUMSINES; 5); ;; how many of these things can we do at once?
 := ($sines; array ($NUMSINES)); ;; an array to hold all the current angles
 := ($rad; void ()); ;; an initial radius value for the central sine
 := ($i; void ()); ;; a counter variable
@@ -20,7 +17,7 @@ setup (-> (
     |> (
     createCanvas();
     = ($rad; * (HEIGHT (); 0.25)); ;; compute radius for central circle
-    background (204); ;; clear the screen
+    background (180); ;; clear the screen
     := ($i; 0);
     ... (< ($i; length ($sines)); 
       |> ( 
@@ -31,8 +28,8 @@ setup (-> (
  draw (-> (
   |> (
     ? (! ($trace); |> (
-      background (204); ;; clear screen if showing geometry
-      stroke (0; 255); ;; black pen
+      background (0); ;; clear screen if showing geometry
+      stroke (255); ;; black pen
       noFill (); ;; don't fill
      )); 
     ;; MAIN ACTION
@@ -45,7 +42,7 @@ setup (-> (
       ;; setup for tracing
         ? ($trace; |> (
           stroke (0; 0; * (/ (float ($i); length ($sines)); 255); $alpha); ;; blue
-          fill (0; 0; 255; * ($alpha; 0.5)); ;; also, um, blue
+          fill (110; 20; 255; * ($alpha; 0.5)); ;; also, um, blue
           = ($erad;  * (5.0; - (1.0; / (float ($i); length ($sines))))) ;; pen width will be related to which sine
         ));
       := ($radius; / ($rad; ++ ($i))); ;; radius for circle itself
@@ -60,4 +57,6 @@ setup (-> (
       assign ($sines; $i; % (+ (access ($sines; $i); $fund; * ($fund; $i; $ratio)); TWO_PI ())); ;; update angle based on fundamental
       = ($i; ++ ($i))));
       pop () ;; pop down final transformation
-  )))
+  )));
+;; helper function for state switching 
+:= ($showTrace; -> (show; = ($trace; show)));
