@@ -1,6 +1,6 @@
 import { printErrors } from '../extentions/dna.js';
-import { editor } from '../main.js';
-import map from '../extentions/map.js';
+import { editor, deps } from '../main.js';
+import { DEPENDENCY_LIST } from '../extentions/dependencies.js';
 
 export const execute = CONSOLE => {
   const CMD = CONSOLE.value.trim().toUpperCase();
@@ -9,19 +9,19 @@ export const execute = CONSOLE => {
     case 'ENCODE': {
       const limit = 2000;
       const value = editor.getValue().replace(/;;.+/g, '');
-      const out = [
+      let out = [
         ...new Set(
           value
-            .replace(/[^$a-zA-z\d]/g, ' ')
+            .replace(/[^0-9a-zA-Z]+/g, ' ')
             .replace(/\s+/g, ' ')
             .trim()
             .split(' ')
-            .filter(x => x.length > 3 && x[0] !== '$' && isNaN(x))
+            .filter(x => x.length > 1 && isNaN(x))
         )
       ]
-        .reduce((acc, item) => {
-          if (item in map) {
-            acc = acc.split(item + '(').join('+' + map[item] + '(');
+        .reduce((acc, item, items) => {
+          if (item in DEPENDENCY_LIST) {
+            acc = acc.split(item + '(').join('!' + DEPENDENCY_LIST[item] + '(');
           }
           return acc;
         }, value.replace(/\s+/g, ''))
@@ -37,7 +37,7 @@ export const execute = CONSOLE => {
                 acc.result += ')';
                 acc.count = 0;
               } else if (acc.count > 1) {
-                acc.result += '#' + acc.count;
+                acc.result += "'" + acc.count;
                 acc.count = 0;
               }
               acc.result += item;
@@ -48,7 +48,7 @@ export const execute = CONSOLE => {
           { result: '', count: 0 }
         );
       if (out.count > 0) {
-        out.result += '#' + out.count;
+        out.result += "'" + out.count;
       }
       const encoded =
         location.href +
@@ -78,13 +78,13 @@ export const execute = CONSOLE => {
         inputEncoding: 'Base64',
         outputEncoding: 'String'
       }).trim();
-      const keys = Object.keys(map);
-      const prefix = [...new Set(value.match(/\+?\d+\(/g))];
-      const suffix = [...new Set(value.match(/\#+?\d+/g))];
+      const keys = Object.keys(DEPENDENCY_LIST);
+      const prefix = [...new Set(value.match(/\!?\d+\(/g))];
+      const suffix = [...new Set(value.match(/\'+?\d+/g))];
       const matcher = suffix.reduce(
         (acc, m) => acc.split(m).join(')'.repeat(parseInt(m.substring(1)))),
         prefix.reduce(
-          (acc, m) => acc.split(m).join(keys[parseInt(m)] + '('),
+          (acc, m) => acc.split(m).join(keys[parseInt(m.substring(1))] + '('),
           value
         )
       );
@@ -98,6 +98,28 @@ export const execute = CONSOLE => {
           .join('; ')
       );
       CONSOLE.value = '';
+      return;
+    }
+    case 'DECODE_RAW': {
+      editor.setValue(
+        LZUTF8.decompress(editor.getValue().trim(), {
+          inputEncoding: 'Base64',
+          outputEncoding: 'String'
+        })
+      );
+    }
+    case 'UPDATE_DEPENDENCY_LIST': {
+      console.log(
+        JSON.stringify(
+          [...new Set(Object.keys(deps.list).map(x => x.replace('.', '')))]
+            .filter(x => x.length > 1)
+            .sort((a, b) => (a.length > b.length ? 1 : -1))
+            .reduce((acc, item, index) => {
+              acc[item] = index;
+              return acc;
+            }, {})
+        )
+      );
       return;
     }
   }

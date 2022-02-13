@@ -10,6 +10,7 @@ export const printErrors = errors => {
   consoleElement.value = errors;
 };
 export const canvas = document.getElementById('canvas');
+
 export const std = {
   void: () => VOID,
   print,
@@ -26,6 +27,7 @@ export const processing = engine => ({
     acc[item] = (...args) => engine[item](...args);
     return acc;
   }, {}),
+  remap: (...args) => engine.map(...args),
   copyVec: vec => vec.copy(),
   normalVec: vec => vec.normalize(),
   limitVec: (vec, limit) => vec.limit(limit),

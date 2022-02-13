@@ -6,6 +6,7 @@ export const editor = CodeMirror(
   document.getElementById('editor-container'),
   {}
 );
+export const deps = { list: {} };
 editor.changeFontSize('12px');
 editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
 let P5;
@@ -60,9 +61,13 @@ document.addEventListener('keydown', e => {
     consoleElement.value = '';
     consoleElement.classList.add('info_line');
     consoleElement.classList.remove('error_line');
-    P5 = new p5(engine =>
-      cell({ ...std, ...processing(engine) })(`|> (${editor.getValue()})`)
-    );
+    P5 = new p5(engine => {
+      const { result, env } = cell({ ...std, ...processing(engine) })(
+        `|> (${editor.getValue()})`
+      );
+      deps.list = env;
+      return result;
+    });
   } else if (e.key.toLowerCase() === 'q' && e.ctrlKey) {
     e = e || window.event;
     e.preventDefault();

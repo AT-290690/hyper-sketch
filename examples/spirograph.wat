@@ -6,7 +6,7 @@
 ;; <a href='http://en.wikipedia.org/wiki/Spirograph'>http://en.wikipedia.org/wiki/Spirograph</a>
 
 := ($NUMSINES; 20); ;; how many of these things can we do at once?
-:= ($sines; :: new ($NUMSINES)); ;; an array to hold all the current angles
+:= ($sines; array ($NUMSINES)); ;; an array to hold all the current angles
 := ($rad; void ()); ;; an initial radius value for the central sine
 := ($i; void ()); ;; a counter variable
 
@@ -16,16 +16,15 @@
 := ($alpha; 50); ;; how opaque is the tracing system
 
 := ($trace; false); ;; are we tracing?
-
 setup (-> ( 
     |> (
     createCanvas();
     = ($rad; * (HEIGHT (); 0.25)); ;; compute radius for central circle
     background (204); ;; clear the screen
     := ($i; 0);
-    ... (< ($i; :: length ($sines)); 
+    ... (< ($i; length ($sines)); 
       |> ( 
-       :: set ($sines; $i; PI ()); ;; start EVERYBODY facing NORTH
+       assign ($sines; $i; PI ()); ;; start EVERYBODY facing NORTH
        = ($i; ++ ($i))))));
 );
 
@@ -40,18 +39,17 @@ setup (-> (
     push (); ;; start a transformation matrix
     translate ( * (WIDTH (); 0.5); * (HEIGHT (); 0.5)); ;; move to middle of screen
     := ($i; 0);
-      ... (< ($i; :: length ($sines)); 
+      ... (< ($i; length ($sines)); 
         |> ( 
-         :: set ($sines; $i; PI ()); 
          := ($erad; 0); ;; radius for small "point" within circle... this is the 'pen' when tracing
       ;; setup for tracing
         ? ($trace; |> (
-          stroke (0; 0; * (/ (float ($i); :: length ($sines)); 255); $alpha); ;; blue
+          stroke (0; 0; * (/ (float ($i); length ($sines)); 255); $alpha); ;; blue
           fill (0; 0; 255; * ($alpha; 0.5)); ;; also, um, blue
-          = ($erad;  * (5.0; - (1.0; / (float ($i); :: length ($sines))))) ;; pen width will be related to which sine
+          = ($erad;  * (5.0; - (1.0; / (float ($i); length ($sines))))) ;; pen width will be related to which sine
         ));
       := ($radius; / ($rad; ++ ($i))); ;; radius for circle itself
-      rotate (:: get ($sines; $i)); ;; rotate circle
+      rotate (access ($sines; $i)); ;; rotate circle
       ? (! ($trace); ellipse(0; 0; * ($radius; 2); * ($radius; 2))); ;; if we're simulating, draw the sine
       push (); ;; go up one level
       translate (0; $radius); ;; move to sine edge
@@ -59,9 +57,7 @@ setup (-> (
       ? ($trace;  ellipse(0; 0; $erad; $erad)); ;; draw with erad if tracing
       pop (); ;; go down one level
       translate (0; $radius); ;; move into position for next sine
-      :: set ($sines; $i; % (+ (:: get ($sines; $i); $fund; * ($fund; $i; $ratio)); TWO_PI ())); ;; update angle based on fundamental
+      assign ($sines; $i; % (+ (access ($sines; $i); $fund; * ($fund; $i; $ratio)); TWO_PI ())); ;; update angle based on fundamental
       = ($i; ++ ($i))));
-       pop () ;; pop down final transformation
-  ));
-     
-  )
+      pop () ;; pop down final transformation
+  )))

@@ -146,6 +146,10 @@ specialForms[':='] = function (args, env) {
     printErrors('Variable names like (' + args[0].name + ') must start with $');
     throw new SyntaxError('Variable names must start with $');
   }
+  if (args[0].name.includes('!') || args[0].name.includes("'")) {
+    printErrors("Variable names can't contain ! and ' characters.");
+    throw new SyntaxError("Variable names can't contain ! and ' characters.");
+  }
   let value = evaluate(args[1], env);
   env[args[0].name] = value;
   return value;
@@ -232,6 +236,6 @@ export default function cell(input) {
       .toString()
       .replace(/\s+|;;.+/g, '')
       .trim();
-    return evaluate(parse(program), env);
+    return { result: evaluate(parse(program), env), env };
   };
 }
