@@ -29,8 +29,8 @@ function parseApply(expr, program) {
       program = program.slice(1);
     } else if (program[0] !== ')') {
       console.error(expr);
-      printErrors("Expected ';' or ')'" + 'but got ' + program[0]);
-      throw new SyntaxError("Expected ';' or ')'" + 'but got ' + program[0]);
+      printErrors("Expected ';' or ')'" + ' but got ' + program[0]);
+      throw new SyntaxError("Expected ';' or ')'" + ' but got ' + program[0]);
     }
   }
   return parseApply(expr, program.slice(1));

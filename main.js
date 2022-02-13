@@ -19,8 +19,8 @@ const updateP5 = () => {
 };
 //  invoke: (inst, method, ...args) => inst[method](...args)
 const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.has('sketch')) {
-  editor.setValue(window.location.search.split('?sketch=')[1].trim());
+if (urlParams.has('s')) {
+  editor.setValue(window.location.search.split('?s=')[1].trim());
   execute({ value: 'decode' });
   // .match(/([^()]+|[^(]+\([^)]*\)[^()]*)/g).map(x=>x.length > 1 ? '\n' + x : 'x')
 
