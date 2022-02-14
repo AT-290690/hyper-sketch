@@ -5,27 +5,13 @@ export const print = function (...values) {
   if (values.length === 0) {
     return VOID;
   }
-  // consoleElement.style.visibility = 'visible';
   values.map(x => (consoleElement.value += `( ${JSON.stringify(x)} ) `));
-  return values.length > 1 ? values[values.length - 1] : values;
+  return values;
 };
 
 export const object = {
   ['objectToKeys']: obj => Object.keys(obj),
-  // ['.toentries']: obj => Object.entries(obj),
-
   ['access']: (object, key) => object[key],
-  // ['.entries']: (...args) => {
-  //   let count = 0;
-  //   return args.reduce((acc, item, i) => {
-  //     if (i % 2) {
-  //       acc[count].push(item);
-  //       count++;
-  //     } else acc[count] = [item];
-  //     return acc;
-  //   }, []);
-  // },
-
   ['objectUpdatePath']: (object, ...path) => {
     let temp = object;
     path.forEach((item, index) => {
@@ -61,7 +47,7 @@ export const object = {
   },
   ['array']: size => {
     const arr = new Array(size);
-    return arr.fill(null).map((x, i) => VOID);
+    return arr.fill(null).map(() => undefined);
   },
   ['overwrite']: (array, ...items) => {
     for (let i = 0; i < items.length; i++) {

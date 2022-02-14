@@ -1,5 +1,5 @@
 import { printErrors } from '../extentions/dna.js';
-export const VOID = undefined;
+export const VOID = null;
 function parseExpression(program) {
   let match, expr;
   if ((match = /^"([^"]*)"/.exec(program))) {
@@ -29,8 +29,12 @@ function parseApply(expr, program) {
       program = program.slice(1);
     } else if (program[0] !== ')') {
       console.error(expr);
-      printErrors("Expected ';' or ')'" + ' but got ' + program[0]);
-      throw new SyntaxError("Expected ';' or ')'" + ' but got ' + program[0]);
+      printErrors(
+        "Unexpected token - Expected ';' or ')'" + ' but got ' + program[0]
+      );
+      throw new SyntaxError(
+        "Unexpected token - Expected ';' or ')'" + ' but got ' + program[0]
+      );
     }
   }
   return parseApply(expr, program.slice(1));
@@ -53,8 +57,8 @@ function evaluate(expr, env) {
       if (expr.name in env) {
         return env[expr.name];
       } else {
-        printErrors(`Undefined constiable: ${expr.name}`);
-        throw new ReferenceError(`Undefined constiable: ${expr.name}`);
+        printErrors(`Undefined variable: ${expr.name}`);
+        throw new ReferenceError(`Undefined variable: ${expr.name}`);
       }
     case 'apply':
       if (expr.operator.type === 'word' && expr.operator.name in specialForms) {
@@ -62,8 +66,8 @@ function evaluate(expr, env) {
       }
       const op = evaluate(expr.operator, env);
       if (typeof op !== 'function') {
-        printErrors('Applying a non-function ' + mutation.operator);
-        throw new TypeError('Applying a non-function ' + mutation.operator);
+        printErrors(mutation.operator + ' is not a function.');
+        throw new TypeError(mutation.operator + ' is not a function.');
       }
       return op.apply(
         null,
@@ -77,8 +81,8 @@ const specialForms = Object.create(null);
 
 specialForms['?'] = function (args, env) {
   if (args.length > 3 || args.length <= 1) {
-    printErrors('Bad number of args to ?');
-    throw new SyntaxError('Bad number of args to ?');
+    printErrors('Invalid number of arguments  to ?');
+    throw new SyntaxError('Invalid number of arguments  to ?');
   }
   if (!!evaluate(args[0], env)) {
     return evaluate(args[1], env);
@@ -90,8 +94,8 @@ specialForms['?'] = function (args, env) {
 };
 specialForms['&&'] = function (args, env) {
   if (args.length === 0) {
-    printErrors('Bad number of args to &&');
-    throw new SyntaxError('Bad number of args to &&');
+    printErrors('Invalid number of arguments  to &&');
+    throw new SyntaxError('Invalid number of arguments  to &&');
   }
   for (let i = 0; i < args.length - 1; i++) {
     if (!!evaluate(args[i], env)) {
@@ -105,8 +109,8 @@ specialForms['&&'] = function (args, env) {
 
 specialForms['||'] = function (args, env) {
   if (args.length === 0) {
-    printErrors('Bad number of args to ||');
-    throw new SyntaxError('Bad number of args to ||');
+    printErrors('Invalid number of arguments  to ||');
+    throw new SyntaxError('Invalid number of arguments  to ||');
   }
   for (let i = 0; i < args.length - 1; i++) {
     if (!!evaluate(args[i], env)) {
@@ -120,8 +124,8 @@ specialForms['||'] = function (args, env) {
 
 specialForms['...'] = function (args, env) {
   if (args.length !== 2) {
-    printErrors('Bad number of args to ...');
-    throw new SyntaxError('Bad number of args to ...');
+    printErrors('Invalid number of arguments  to ...');
+    throw new SyntaxError('Invalid number of arguments  to ...');
   }
   while (!!evaluate(args[0], env)) {
     evaluate(args[1], env);
@@ -139,8 +143,8 @@ specialForms['|>'] = function (args, env) {
 specialForms[':='] = function (args, env) {
   if (args.length !== 2 || args[0].type !== 'word') {
     console.error(args);
-    printErrors('Bad use of :=');
-    throw new SyntaxError('Bad use of :=');
+    printErrors('Invalid use of operation -  :=');
+    throw new SyntaxError('Invalid use of operation -  :=');
   }
   if (args[0].name[0] !== '$') {
     printErrors('Variable names like (' + args[0].name + ') must start with $');
@@ -174,8 +178,8 @@ specialForms['->'] = function (args, env) {
     if (args.length !== argNames.length) {
       console.error(argNames);
       console.error(args);
-      printErrors('Wrong number of arguments');
-      throw new TypeError('Wrong number of arguments');
+      printErrors('Invalid number of arguments ');
+      throw new TypeError('Invalid number of arguments ');
     }
     const localEnv = Object.create(env);
     for (let i = 0; i < args.length; i++) {
@@ -187,8 +191,8 @@ specialForms['->'] = function (args, env) {
 specialForms['='] = function (args, env) {
   if (args.length !== 2 || args[0].type !== 'word') {
     console.error(args);
-    printErrors('Bad use of =');
-    throw new SyntaxError('Bad use of =');
+    printErrors('Invalid use of operation -  =');
+    throw new SyntaxError('Invalid use of operation -  =');
   }
 
   const valName = args[0].name;
@@ -199,8 +203,8 @@ specialForms['='] = function (args, env) {
       return value;
     }
   }
-  printErrors(`Tried setting an undefined constiable: ${valName}`);
-  throw new ReferenceError(`Tried setting an undefined constiable: ${valName}`);
+  printErrors(`Tried setting an undefined variable: ${valName}`);
+  throw new ReferenceError(`Tried setting an undefined variable: ${valName}`);
 };
 const topEnv = Object.create(null);
 topEnv['true'] = true;

@@ -20,6 +20,6 @@ setup (-> (
 draw (-> (
   |> (
     background (0);
-    line (. get ($v1; "x"); . get ($v1; "y"); MOUSE_X (); MOUSE_Y ());
+    line (access ($v1; "x"); access ($v1; "y"); MOUSE_X (); MOUSE_Y ());
   )
 ))

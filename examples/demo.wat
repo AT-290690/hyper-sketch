@@ -16,3 +16,6 @@ setTimeout (-> (
  )
 ); time)
 ));
+
+:= ($safeLoop; -> (i; end; fn; |> ( ? (< (i; end); ... (< (i; end); |> (fn(i); = (i; ++ (i))))))));
+$safeLoop (0; 5; -> (i; print (i)));

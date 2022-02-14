@@ -7,6 +7,7 @@ export const execute = CONSOLE => {
   editor.focus();
   switch (CMD) {
     case 'ENCODE': {
+      window.history.pushState({}, document.title, window.location.pathname);
       const limit = 2000;
       const value = editor.getValue().replace(/;;.+/g, '');
       let out = [
