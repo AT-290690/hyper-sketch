@@ -1,4 +1,4 @@
-:= ($angle; * (PI (); 0.2));
+:= (angle; * (PI; 0.2));
 
 setup (-> (
   |> (
@@ -10,22 +10,22 @@ draw ( -> (
   |> (
     background (0);
     stroke (10; 130; 170);
-    translate (* (WIDTH (); 0.5); HEIGHT());
-    $branch (100);
+    translate (* (width (); 0.5); height ());
+    branch (100);
   )
 ));
 
-:= ($branch; -> (len; |> (
+:= (branch; -> (len; |> (
   line (0; 0; 0; * (len; -1));
   translate (0; * (len; -1));
   ? ( > (len; 10); |> (
     push ();
-    rotate ($angle);
-    $branch (* (len; 0.75));
+    rotate (angle);
+    branch (* (len; 0.75));
     pop ();
     push ();
-    rotate (* ($angle; -1));
-    $branch (* (len; 0.75));
+    rotate (* (angle; -1));
+    branch (* (len; 0.75));
     pop ();
   ))
 )))

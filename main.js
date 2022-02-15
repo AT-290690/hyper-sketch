@@ -2,10 +2,9 @@ import { CodeMirror } from './libs/editor/cell.editor.bundle.js';
 import cell from './parser/cell.js';
 import { std, processing, consoleElement } from './extentions/dna.js';
 import { execute } from './commands/exec.js';
-
 export const editorContainer = document.getElementById('editor-container');
 export const editor = CodeMirror(editorContainer, {});
-export const State = { list: {}, lastSelection: '' };
+export const State = { list: {}, lastSelection: '', drawMode: undefined };
 
 editor.changeFontSize('12px');
 editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
@@ -15,7 +14,7 @@ const updateP5 = () => {
     let id = setTimeout(function () {}, 0);
     while (id--) clearTimeout(id);
     cancelAnimationFrame(P5.draw);
-    const canv = P5.createCanvas(0, 0);
+    const canv = P5.createCanvas(0, 0, State.drawMode);
     canv.parent('canvas-container');
     P5.remove();
   }
@@ -28,7 +27,7 @@ if (urlParams.has('s')) {
   // .match(/([^()]+|[^(]+\([^)]*\)[^()]*)/g).map(x=>x.length > 1 ? '\n' + x : 'x')
 } else {
   editor.setValue(`
-setup(-> (
+setup (-> (
   |> (
     ;; createCanvas ();
 ))); 

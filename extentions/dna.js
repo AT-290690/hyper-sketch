@@ -1,7 +1,7 @@
 import { array, object, bitwise, print } from './mutations.js';
 import { VOID } from '../parser/cell.js';
-import { p5_constants, p5_remap } from './p5_remapping.min.js';
-import { canvasContainer, editor } from '../main.js';
+import { p5_remap } from './p5_remapping.min.js';
+import { canvasContainer, editor, State } from '../main.js';
 export const consoleElement = document.getElementById('console');
 export const printErrors = errors => {
   consoleElement.classList.remove('info_line');
@@ -81,19 +81,145 @@ export const processing = engine => ({
       acc.dist(x);
       return acc;
     }, first),
-  WIDTH: () => engine.width,
-  HEIGHT: () => engine.height,
-  MOUSE_X: () => engine.mouseX,
-  MOUSE_Y: () => engine.mouseY,
-  ...p5_constants.reduce((acc, item) => {
-    acc[item] = () => engine[item];
-    return acc;
-  }, {}),
+  width: () => engine.width,
+  height: () => engine.height,
+  mouseX: () => engine.mouseX,
+  mouseY: () => engine.mouseY,
+  frameCount: () => engine.frameCount,
+  ALT: 18,
+  ARROW: 'default',
+  AUDIO: 'audio',
+  AUTO: 'auto',
+  AXES: 'axes',
+  BACKSPACE: 8,
+  BASELINE: 'alphabetic',
+  BEVEL: 'bevel',
+  BEZIER: 'bezier',
+  BLEND: 'source-over',
+  BLUR: 'blur',
+  BOLD: 'bold',
+  BOLDITALIC: 'bold italic',
+  BOTTOM: 'bottom',
+  BURN: 'color-burn',
+  CENTER: 'center',
+  CHAR: 'CHAR',
+  CHORD: 'chord',
+  CLAMP: 'clamp',
+  CLOSE: 'close',
+  CONTROL: 17,
+  CORNER: 'corner',
+  CORNERS: 'corners',
+  CROSS: 'crosshair',
+  CURVE: 'curve',
+  DARKEST: 'darken',
+  DEGREES: 'degrees',
+  DEG_TO_RAD: 0.017453292519943295,
+  DELETE: 46,
+  DIFFERENCE: 'difference',
+  DILATE: 'dilate',
+  DODGE: 'color-dodge',
+  DOWN_ARROW: 40,
+  ENTER: 13,
+  ERODE: 'erode',
+  ESCAPE: 27,
+  EXCLUSION: 'exclusion',
+  FALLBACK: 'fallback',
+  FILL: 'fill',
+  GRAY: 'gray',
+  GRID: 'grid',
+  HALF_PI: 1.5707963267948966,
+  HAND: 'pointer',
+  HARD_LIGHT: 'hard-light',
+  HSB: 'hsb',
+  HSL: 'hsl',
+  IMAGE: 'image',
+  IMMEDIATE: 'immediate',
+  INVERT: 'invert',
+  ITALIC: 'italic',
+  LABEL: 'label',
+  LANDSCAPE: 'landscape',
+  LEFT: 'left',
+  LEFT_ARROW: 37,
+  LIGHTEST: 'lighten',
+  LINEAR: 'linear',
+  LINES: 1,
+  LINE_LOOP: 2,
+  LINE_STRIP: 3,
+  MIRROR: 'mirror',
+  MITER: 'miter',
+  MOVE: 'move',
+  MULTIPLY: 'multiply',
+  NEAREST: 'nearest',
+  NORMAL: 'normal',
+  OPAQUE: 'opaque',
+  OPEN: 'open',
+  OPTION: 18,
+  OVERLAY: 'overlay',
+  P2D: 'p2d',
+  PI: 3.141592653589793,
+  PIE: 'pie',
+  POINTS: 0,
+  PORTRAIT: 'portrait',
+  POSTERIZE: 'posterize',
+  PROJECT: 'square',
+  QUADRATIC: 'quadratic',
+  QUADS: 'quads',
+  QUAD_STRIP: 'quad_strip',
+  QUARTER_PI: 0.7853981633974483,
+  RADIANS: 'radians',
+  RADIUS: 'radius',
+  RAD_TO_DEG: 57.29577951308232,
+  REMOVE: 'destination-out',
+  REPEAT: 'repeat',
+  REPLACE: 'copy',
+  RETURN: 13,
+  RGB: 'rgb',
+  RIGHT: 'right',
+  RIGHT_ARROW: 39,
+  ROUND: 'round',
+  SCREEN: 'screen',
+  SHIFT: 16,
+  SOFT_LIGHT: 'soft-light',
+  SQUARE: 'butt',
+  STROKE: 'stroke',
+  SUBTRACT: 'subtract',
+  TAB: 9,
+  TAU: 6.283185307179586,
+  TESS: 'tess',
+  TEXT: 'text',
+  TEXTURE: 'texture',
+  THRESHOLD: 'threshold',
+  TOP: 'top',
+  TRIANGLES: 4,
+  TRIANGLE_FAN: 6,
+  TRIANGLE_STRIP: 5,
+  TWO_PI: 6.283185307179586,
+  UP_ARROW: 38,
+  VERSION: '1.4.1',
+  VIDEO: 'video',
+  WAIT: 'wait',
+  WEBGL: 'webgl',
+  WORD: 'WORD',
   setup: fn => (engine.setup = fn),
-  createCanvas: (w = window.innerWidth / 2, h = window.innerHeight - 82) => {
+  createCanvas: (
+    w = window.innerWidth / 2,
+    h = window.innerHeight - 82,
+    mode
+  ) => {
     canvasContainer.style.display = 'block';
     editor.setSize(window.innerWidth / 2 - 15);
-    const canvas = engine.createCanvas(w, h);
+    State.drawMode = mode;
+    const canvas = engine.createCanvas(w, h, mode);
+    canvas.parent('canvas-container');
+  },
+  createWebGlCanvas: (
+    w = window.innerWidth / 2,
+    h = window.innerHeight - 82
+  ) => {
+    canvasContainer.style.display = 'block';
+    editor.setSize(window.innerWidth / 2 - 15);
+    State.drawMode = 'webgl';
+    const canvas = engine.createCanvas(w, h, 'webgl');
     canvas.parent('canvas-container');
   },
   draw: fn => (engine.draw = fn)

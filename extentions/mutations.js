@@ -8,10 +8,31 @@ export const print = function (...values) {
   values.map(x => (consoleElement.value += `( ${JSON.stringify(x)} ) `));
   return values;
 };
-
+const constructMatrix = dimensions => {
+  if (dimensions.length > 0) {
+    const dim = dimensions[0];
+    const rest = dimensions.slice(1);
+    const arr = [];
+    for (let i = 0; i < dim; i++) {
+      arr[i] = constructMatrix(rest);
+    }
+    return arr;
+  } else {
+    return VOID;
+  }
+};
+// const iterateMatrix = (arr, callback) => {
+//   if (Array.isArray(arr)) {
+//     for (let i = 0; i < arr.length; i++) {
+//       iterateMatrix(arr[i], i => callback(i));
+//     }
+//   } else {
+//     return callback();
+//   }
+// };
 export const object = {
   ['objectToKeys']: obj => Object.keys(obj),
-  ['access']: (object, key) => object[key],
+  ['accessProperty']: (object, key) => object[key],
   ['objectUpdatePath']: (object, ...path) => {
     let temp = object;
     path.forEach((item, index) => {
@@ -46,8 +67,8 @@ export const object = {
     }
   },
   ['array']: size => {
-    const arr = new Array(size);
-    return arr.fill(null).map(() => undefined);
+    const arr = new Array(size ?? 0);
+    return arr.fill(null).map(() => null);
   },
   ['overwrite']: (array, ...items) => {
     for (let i = 0; i < items.length; i++) {
@@ -55,7 +76,34 @@ export const object = {
     }
     return array;
   },
-  ['assign']: (entity, key, item) => (entity[key] = item)
+  ['assignProperty']: (entity, key, item) => (entity[key] = item),
+  ['range']: (start, end) => {
+    const arr = [];
+    if (start > end) {
+      for (let i = start; i >= end; i--) {
+        arr.push(i);
+      }
+    } else {
+      for (let i = start; i <= end; i++) {
+        arr.push(i);
+      }
+    }
+    return arr;
+  },
+  ['matrix']: (...dimensions) => constructMatrix(dimensions)
+  // ['iterateMatrix']: (matrix, callback) => iterateMatrix(matrix, callback),
+  // ['for']: (start, end) =>
+  //   start > end
+  //     ? callback => {
+  //         for (let i = start; i > end; i--) {
+  //           callback(i);
+  //         }
+  //       }
+  //     : callback => {
+  //         for (let i = start; i < end; i++) {
+  //           callback(i);
+  //         }
+  //       }
 };
 
 const obtainPrototype = (Entity, prefix, suffix) => {
@@ -82,6 +130,10 @@ export const array = (() => {
   Arr['addAtStart'] = (entity, ...args) => entity['unshift'](...args);
   Arr['removeFromEnd'] = (entity, ...args) => entity['pop'](...args);
   Arr['removeFromStart'] = (entity, ...args) => entity['shift'](...args);
+  Arr['in'] = (entity, callback) => {
+    entity.forEach((x, i) => callback(x, i));
+    return entity;
+  };
   return Arr;
 })();
 
