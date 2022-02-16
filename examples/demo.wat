@@ -1,3 +1,5 @@
+
+
 := ($obj; object 
            ("x"; 10;
             "y"; 25;
@@ -10,14 +12,14 @@ print ($obj; map ($arr; -> (x; i; a; * (x; *(x; ++(i))))));
 := ($toggle; -> (=($trace; !($trace))));
 := ($recursiveToggle; -> (time;
 setTimeout (-> (
- |> (
+ => (
      $toggle();
      $recursiveToggle(time);
  )
 ); time)
 ));
 
-:= ($safeLoop; -> (i; end; fn; |> ( ? (< (i; end); ... (< (i; end); |> (fn(i); = (i; ++ (i))))))));
+:= ($safeLoop; -> (i; end; fn; => ( ? (< (i; end); ... (< (i; end); => (fn(i); = (i; ++ (i))))))));
 $safeLoop (0; 5; -> (i; print (i)));
 
 := ($arr; array ());
@@ -28,7 +30,7 @@ print ($arr);
 
 
 := ($i; 0);
-@ (0; 10; |> (
+@ (0; 10; => (
   print ($i);
   = ($i; ++ ($i))));
 
@@ -42,3 +44,18 @@ print ($arr);
 := (start; 2);
 := (end; 15);
 @ (start; end; print("*"))
+
+     in (board; -> (row; x; 
+          in (row; -> (col; y; => (
+            ;; Add up all the states in a 3x3 surrounding grid
+          
+                       = (j; ++ (j))));
+                     = (i; ++ (i))));
+
+:= (x; => (
+  := (y; 5);
+  = (y; ++ (y));
+  * (y; 2)));
+
+print (x);
+                     

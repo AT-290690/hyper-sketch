@@ -12,22 +12,22 @@
 := (ratio; 1); ;; what multiplier for speed is each additional sine?
 := (alpha; 50); ;; how opaque is the tracing system
 
-:= (trace; false); ;; are we tracing?
+:= (trace; 0); ;; are we tracing?
 setup (-> ( 
-    |> (
+    => (
     createCanvas();
     = (rad; * (height (); 0.25)); ;; compute radius for central circle
     background (180); ;; clear the screen
     := (i; 0);
-    while (< (i; length (sines)); 
-      |> ( 
+    do (< (i; length (sines)); 
+      => ( 
        .= (sines; i; PI); ;; start EVERYBODY facing NORTH
        = (i; ++ (i))))));
 );
 
  draw (-> (
-  |> (
-    ? (! (trace); |> (
+  => (
+    ? (! (trace); => (
       background (0); ;; clear screen if showing geometry
       stroke (255); ;; black pen
       noFill (); ;; don't fill
@@ -36,11 +36,11 @@ setup (-> (
     push (); ;; start a transformation matrix
     translate ( * (width (); 0.5); * (height (); 0.5)); ;; move to middle of screen
     := (i; 0);
-      while (< (i; length (sines)); 
-        |> ( 
+      do (< (i; length (sines)); 
+        => ( 
          := (erad; 0); ;; radius for small "point" within circle... this is the 'pen' when tracing
       ;; setup for tracing
-        ? (trace; |> (
+        ? (trace; => (
           stroke (0; 0; * (/ (float (i); length (sines)); 255); alpha); ;; blue
           fill (110; 20; 255; * (alpha; 0.5)); ;; also, um, blue
           = (erad;  * (5.0; - (1.0; / (float (i); length (sines))))) ;; pen width will be related to which sine

@@ -4,7 +4,12 @@ import { std, processing, consoleElement } from './extentions/dna.js';
 import { execute } from './commands/exec.js';
 export const editorContainer = document.getElementById('editor-container');
 export const editor = CodeMirror(editorContainer, {});
-export const State = { list: {}, lastSelection: '', drawMode: undefined };
+export const State = {
+  list: {},
+  lastSelection: '',
+  drawMode: undefined,
+  AST: {}
+};
 
 editor.changeFontSize('12px');
 editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
@@ -28,12 +33,12 @@ if (urlParams.has('s')) {
 } else {
   editor.setValue(`
 setup (-> (
-  |> (
+  => (
     ;; createCanvas ();
 ))); 
   
 draw (-> (
-  |> (
+  => (
     ;; background (30);
 )));`);
 }
@@ -66,12 +71,13 @@ document.addEventListener('keydown', e => {
     consoleElement.classList.add('info_line');
     consoleElement.classList.remove('error_line');
     P5 = new p5(engine => {
-      const { result, env } = cell({ ...std, ...processing(engine) })(
-        `|> (
+      const { result, env, AST } = cell({ ...std, ...processing(engine) })(
+        `=> (
           ${editor.getValue()}
         )`
       );
       State.list = env;
+      State.AST = AST;
       return result;
     });
   } else if (e.key.toLowerCase() === 'q' && e.ctrlKey) {

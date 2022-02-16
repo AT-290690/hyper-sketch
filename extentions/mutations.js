@@ -138,7 +138,7 @@ export const array = (() => {
 })();
 
 export const bitwise = {
-  ['!']: operand => !operand,
+  ['!']: operand => +!operand,
   ['^']: (left, right) => left ^ right,
   ['>>>']: (left, right) => left >>> right,
   ['>>']: (left, right) => left >> right,

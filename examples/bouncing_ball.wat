@@ -4,10 +4,10 @@
 := (yspeed; 2);
 := (r; 15);
 
-setup (-> ( |> (
+setup (-> ( => (
   createCanvas ();
 )));
-draw (-> (|> (
+draw (-> (=> (
   background( 0);
   ellipse (x; y; r);
   = (x; + (x; xspeed));

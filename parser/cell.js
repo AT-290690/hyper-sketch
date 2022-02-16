@@ -89,7 +89,7 @@ specialForms['?'] = function (args, env) {
   } else if (args[2]) {
     return evaluate(args[2], env);
   } else {
-    return false;
+    return 0;
   }
 };
 specialForms['&&'] = function (args, env) {
@@ -122,10 +122,10 @@ specialForms['||'] = function (args, env) {
   return evaluate(args[args.length - 1], env);
 };
 
-specialForms['while'] = function (args, env) {
+specialForms['do'] = function (args, env) {
   if (args.length !== 2) {
-    printErrors('Invalid number of arguments to while');
-    throw new SyntaxError('Invalid number of arguments to while');
+    printErrors('Invalid number of arguments to do');
+    throw new SyntaxError('Invalid number of arguments to do');
   }
   while (!!evaluate(args[0], env)) {
     evaluate(args[1], env);
@@ -166,7 +166,7 @@ specialForms['for'] = function (args, env) {
   return VOID;
 };
 
-specialForms['|>'] = function (args, env) {
+specialForms['=>'] = function (args, env) {
   let value = VOID;
   args.forEach(function (arg) {
     value = evaluate(arg, env);
@@ -174,7 +174,7 @@ specialForms['|>'] = function (args, env) {
   return value;
 };
 specialForms[':='] = function (args, env) {
-  if (args.length !== 2 || args[0].type !== 'word') {
+  if (args?.[0].type !== 'word' || args.length > 2) {
     printErrors('Invalid use of operation :=');
     throw new SyntaxError('Invalid use of operation :=');
   }
@@ -186,7 +186,8 @@ specialForms[':='] = function (args, env) {
     printErrors("Variable names can't contain ! and ' characters.");
     throw new SyntaxError("Variable names can't contain ! and ' characters.");
   }
-  let value = evaluate(args[1], env);
+
+  const value = args.length === 1 ? VOID : evaluate(args[args.length - 1], env);
   env[args[0].name] = value;
   return value;
 };
@@ -294,19 +295,16 @@ specialForms['.'] = function (args, env) {
   throw new ReferenceError(`Tried setting an undefined variable: ${valName}`);
 };
 const topEnv = Object.create(null);
-topEnv['true'] = true;
-topEnv['false'] = false;
-topEnv['null'] = null;
 const operatorsMap = {
   ['+']: (first, ...args) => args.reduce((acc, x) => (acc += x), first),
   ['-']: (first, ...args) => args.reduce((acc, x) => (acc -= x), first),
   ['*']: (first, ...args) => args.reduce((acc, x) => (acc *= x), first),
   ['/']: (first, ...args) => args.reduce((acc, x) => (acc /= x), first),
-  ['==']: (first, ...args) => args.every(x => first === x),
-  ['>']: (first, ...args) => args.every(x => first > x),
-  ['<']: (first, ...args) => args.every(x => first < x),
-  ['>=']: (first, ...args) => args.every(x => first >= x),
-  ['<=']: (first, ...args) => args.every(x => first <= x),
+  ['==']: (first, ...args) => +args.every(x => first === x),
+  ['>']: (first, ...args) => +args.every(x => first > x),
+  ['<']: (first, ...args) => +args.every(x => first < x),
+  ['>=']: (first, ...args) => +args.every(x => first >= x),
+  ['<=']: (first, ...args) => +args.every(x => first <= x),
   ['%']: (left, right) => left % right,
   ['**']: (left, right) => left ** right,
   ['++']: operand => ++operand
@@ -327,6 +325,7 @@ export default function cell(input) {
       .toString()
       .replace(/\s+|;;.+/g, '')
       .trim();
-    return { result: evaluate(parse(program), env), env };
+    const AST = parse(program);
+    return { result: evaluate(AST, env), env, AST };
   };
 }

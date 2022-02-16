@@ -2,24 +2,27 @@ import { printErrors } from '../extentions/dna.js';
 import { editor, State } from '../main.js';
 import { DEPENDENCY_LIST } from '../extentions/dependencies.js';
 const HASH_TRESHOLD = 3;
+const ABC =
+  'abcdefghijklmnopqrstuvwxyz'.toUpperCase() + 'abcdefghijklmnopqrstuvwxyz';
+
 export const execute = CONSOLE => {
   const CMD = CONSOLE.value.trim().toUpperCase();
+
   switch (CMD) {
     case 'ENCODE':
       {
         window.history.pushState({}, document.title, window.location.pathname);
         const limit = 2000;
         const value = editor.getValue().replace(/;;.+/g, '');
-        let out = [
-          ...new Set(
-            value
-              .replace(/[^0-9a-zA-Z]+/g, ' ')
-              .replace(/\s+/g, ' ')
-              .trim()
-              .split(' ')
-              .filter(x => x.length > HASH_TRESHOLD && isNaN(x))
-          )
-        ]
+        const wordTokens = value
+          .replace(/[^"0-9a-zA-Z]+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .split(' ')
+          .filter(x => !x.includes('"') && isNaN(+x));
+
+        const words = wordTokens.filter(x => x.length > HASH_TRESHOLD);
+        const out = [...new Set(words)]
           .reduce((acc, item, items) => {
             if (item in DEPENDENCY_LIST) {
               acc = acc
@@ -53,6 +56,15 @@ export const execute = CONSOLE => {
         if (out.count > 0) {
           out.result += "'" + out.count;
         }
+        const tokenSet = new Set([...wordTokens]);
+        const abc = [...ABC].filter(x => !tokenSet.has(x));
+        [...new Set(words.filter(x => !(x in DEPENDENCY_LIST)))]
+          .sort((a, b) => (a.length > b.length ? -1 : 1))
+          .slice(0, ABC.length)
+          .forEach(x => {
+            out.result = out.result.replaceAll(x, abc.pop());
+          });
+
         const encoded =
           location.href +
           '?s=' +
@@ -155,12 +167,12 @@ export const execute = CONSOLE => {
         window.history.pushState({}, document.title, window.location.pathname);
         editor.setValue(`
 setup (-> (
-  |> (
+  => (
     ;; createCanvas ();
 ))); 
   
 draw (-> (
-  |> (
+  => (
     ;; background (30);
 )));`);
         CONSOLE.value = '';

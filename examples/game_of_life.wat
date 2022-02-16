@@ -8,7 +8,7 @@
 := (board; void());
 := (getCell; -> (m; x; y; accessProperty (accessProperty (m; x); y)));
 := (createGrid; -> (H; W;
-     |> (
+     => (
      ;; initialize grid cells 
       := (grid; matrix (H; W));
        in (grid; -> (x; i; in (x; -> (y; j; 
@@ -20,18 +20,18 @@
           object ("state"; 0; "next"; 0); 
           object ("state"; floor (random(2)); "next"; floor (random(2))))))))))));
     
-  setup ( -> ( |> (
+  setup ( -> ( => (
     createCanvas ();
     ;; Calculate columns and rows
     = (columns; floor ( / (width (); $Res)));
     = (rows; floor ( / (height (); $Res)));
     = (board; createGrid (columns; rows)))));
   
-  draw ( -> (|> (
+  draw ( -> (=> (
     background(50);
     generate ();
-   for (:= (x; 1); - (columns; 1); |> (
-      for (:= (y; 1); - (rows; 1) ; |> (
+   for (:= (x; 1); - (columns; 1); => (
+      for (:= (y; 1); - (rows; 1) ; => (
                := (current; getCell (board; x; y));
              ? (== (. (current; "state"); 1); fill (33); fill (125));
                rect ( * (x; $Res); * (y; $Res); - ($Res; 1); - ($Res; 1));
@@ -41,18 +41,18 @@
    
   ;; The process of creating the new generation
   := (generate; -> (
-    |> (
+    => (
       ;; Loop through every spot in our 2D array and check spots neighbors
         := (x; 1); 
-         while (< (x; - (columns; 1)); |> (
+         do (< (x; - (columns; 1)); => (
            := (y; 1);
-           while (< (y; - (rows; 1)); |> (
+           do (< (y; - (rows; 1)); => (
             ;; Add up all the states in a 3x3 surrounding grid
               := (neighbors; 0);
                  := (i; -1); 
-                   while (<= (i; 1); |> (
+                   do (<= (i; 1); => (
                      := (j; -1);
-                     while (<= (j; 1); |> (
+                     do (<= (j; 1); => (
                        := (score; getCell (board; + (x; i); + (y; j)));
                        = (neighbors; + (neighbors; . (score; "state")));
                        = (j; ++ (j))));
