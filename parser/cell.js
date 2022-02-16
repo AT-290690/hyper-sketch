@@ -327,7 +327,7 @@ const operatorsMap = {
   ['>=']: (first, ...args) => +args.every(x => first >= x),
   ['<=']: (first, ...args) => +args.every(x => first <= x),
   ['%']: (left, right) => left % right,
-  ['**']: (left, right) => left ** right
+  ['**']: (left, right) => left ** (right ?? 2)
 };
 ['+', '-', '*', '/', '==', '<', '>', '>=', '<=', '%', '**'].forEach(op => {
   topEnv[op] = operatorsMap[op];

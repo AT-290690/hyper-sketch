@@ -10,7 +10,7 @@
 ;; play with these to get a sense of what's going on:
 := (fund; 0.005); ;; the speed of the central sine
 := (ratio; 1); ;; what multiplier for speed is each additional sine?
-:= (alpha; 50); ;; how opaque is the tracing system
+:= (gamma; 50); ;; how opaque is the tracing system
 
 := (trace; 0); ;; are we tracing?
 setup (-> ( 
@@ -41,8 +41,8 @@ setup (-> (
          := (erad; 0); ;; radius for small "point" within circle... this is the 'pen' when tracing
       ;; setup for tracing
         ? (trace; => (
-          stroke (0; 0; * (/ (float (i); length (sines)); 255); alpha); ;; blue
-          fill (110; 20; 255; * (alpha; 0.5)); ;; also, um, blue
+          stroke (0; 0; * (/ (float (i); length (sines)); 255); gamma); ;; blue
+          fill (110; 20; 255; * (gamma; 0.5)); ;; also, um, blue
           = (erad;  * (5.0; - (1.0; / (float (i); length (sines))))) ;; pen width will be related to which sine
         ));
       := (radius; / (rad; +(i; 1))); ;; radius for circle itself

@@ -90,6 +90,7 @@ export const object = {
     }
     return arr;
   },
+
   ['matrix']: (...dimensions) => constructMatrix(dimensions)
   // ['iterateMatrix']: (matrix, callback) => iterateMatrix(matrix, callback),
   // ['for']: (start, end) =>
@@ -130,8 +131,17 @@ export const array = (() => {
   Arr['addAtStart'] = (entity, ...args) => entity['unshift'](...args);
   Arr['removeFromEnd'] = (entity, ...args) => entity['pop'](...args);
   Arr['removeFromStart'] = (entity, ...args) => entity['shift'](...args);
+  Arr['clone'] = entity => [...entity];
+  Arr['of'] = (entity, callback) => {
+    for (let i = 0; i < entity.length; i++) {
+      callback(entity[i]);
+    }
+    return entity;
+  };
   Arr['in'] = (entity, callback) => {
-    entity.forEach((x, i) => callback(x, i));
+    for (let i = 0; i < entity.length; i++) {
+      callback(entity[i], i);
+    }
     return entity;
   };
   return Arr;
