@@ -19,10 +19,10 @@ setup (-> (
     = (rad; * (height (); 0.25)); ;; compute radius for central circle
     background (180); ;; clear the screen
     := (i; 0);
-    do (< (i; length (sines)); 
+    ~ (< (i; length (sines)); 
       => ( 
        .= (sines; i; PI); ;; start EVERYBODY facing NORTH
-       = (i; ++ (i))))));
+       +=(i)))));
 );
 
  draw (-> (
@@ -36,7 +36,7 @@ setup (-> (
     push (); ;; start a transformation matrix
     translate ( * (width (); 0.5); * (height (); 0.5)); ;; move to middle of screen
     := (i; 0);
-      do (< (i; length (sines)); 
+      ~ (< (i; length (sines)); 
         => ( 
          := (erad; 0); ;; radius for small "point" within circle... this is the 'pen' when tracing
       ;; setup for tracing
@@ -45,7 +45,7 @@ setup (-> (
           fill (110; 20; 255; * (alpha; 0.5)); ;; also, um, blue
           = (erad;  * (5.0; - (1.0; / (float (i); length (sines))))) ;; pen width will be related to which sine
         ));
-      := (radius; / (rad; ++ (i))); ;; radius for circle itself
+      := (radius; / (rad; +(i; 1))); ;; radius for circle itself
       rotate (. (sines; i)); ;; rotate circle
       ? (! (trace); ellipse(0; 0; * (radius; 2); * (radius; 2))); ;; if we're simulating, draw the sine
       push (); ;; go up one level
@@ -55,7 +55,7 @@ setup (-> (
       pop (); ;; go down one level
       translate (0; radius); ;; move into position for next sine
       .= (sines; i; % (+ (. (sines; i); fund; * (fund; i; ratio)); TWO_PI)); ;; update angle based on fundamental
-      = (i; ++ (i))));
+      +=(i)));
       pop () ;; pop down final transformation
   )));
 ;; helper function for state switching 

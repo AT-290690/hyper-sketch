@@ -122,10 +122,10 @@ specialForms['||'] = function (args, env) {
   return evaluate(args[args.length - 1], env);
 };
 
-specialForms['do'] = function (args, env) {
+specialForms['~'] = function (args, env) {
   if (args.length !== 2) {
-    printErrors('Invalid number of arguments to do');
-    throw new SyntaxError('Invalid number of arguments to do');
+    printErrors('Invalid number of arguments to ~');
+    throw new SyntaxError('Invalid number of arguments to ~');
   }
   while (!!evaluate(args[0], env)) {
     evaluate(args[1], env);
@@ -133,10 +133,10 @@ specialForms['do'] = function (args, env) {
   // Cell has no undefined so we return void when there's no meaningful result.
   return VOID;
 };
-specialForms['for'] = function (args, env) {
+specialForms['++'] = function (args, env) {
   if (args.length !== 3) {
-    printErrors('Invalid number of arguments to for');
-    throw new SyntaxError('Invalid number of arguments to for');
+    printErrors('Invalid number of arguments to ++');
+    throw new SyntaxError('Invalid number of arguments to ++');
   }
   const range = [];
   for (let x = 0; x <= 1; x++) {
@@ -190,6 +190,27 @@ specialForms[':='] = function (args, env) {
   const value = args.length === 1 ? VOID : evaluate(args[args.length - 1], env);
   env[args[0].name] = value;
   return value;
+};
+specialForms['+='] = function (args, env) {
+  if (args.length === 0 || args[0].type !== 'word') {
+    console.error(args);
+    printErrors('Invalid use of operation +=');
+    throw new SyntaxError('Invalid use of operation +=');
+  }
+  const valName = args[0].name;
+  let value = evaluate(args[0], env);
+  const inc = args[1] ? evaluate(args[1], env) : 1;
+  for (let scope = env; scope; scope = Object.getPrototypeOf(scope)) {
+    if (Object.prototype.hasOwnProperty.call(scope, valName)) {
+      value += inc;
+      scope[valName] = value;
+      return value;
+    }
+  }
+  printErrors(`Tried incrementing an undefined variable: ${valName}`);
+  throw new ReferenceError(
+    `Tried incrementing an undefined variable: ${valName}`
+  );
 };
 specialForms['->'] = function (args, env) {
   if (!args.length) {
@@ -265,20 +286,20 @@ specialForms['.'] = function (args, env) {
     printErrors('Invalid use of operation .');
     throw new SyntaxError('Invalid use of operation .');
   }
-  if (
-    args[1].type !== 'value' &&
-    args[1].type !== 'word' &&
-    args[1].type !== 'apply'
-  ) {
-    printErrors(
-      'Property must be either a word or a value for operation . but got ' +
-        args[1].type
-    );
-    throw new SyntaxError(
-      'Property must be either a word or a value for operation . but got ' +
-        args[1].type
-    );
-  }
+  // if (
+  //   args[1].type !== 'value' &&
+  //   args[1].type !== 'word' &&
+  //   args[1].type !== 'apply'
+  // ) {
+  //   printErrors(
+  //     'Property must be either a word or a value for operation . but got ' +
+  //       args[1].type
+  //   );
+  //   throw new SyntaxError(
+  //     'Property must be either a word or a value for operation . but got ' +
+  //       args[1].type
+  //   );
+  // }
   const valName = args[0].name;
 
   const prop =
@@ -306,14 +327,11 @@ const operatorsMap = {
   ['>=']: (first, ...args) => +args.every(x => first >= x),
   ['<=']: (first, ...args) => +args.every(x => first <= x),
   ['%']: (left, right) => left % right,
-  ['**']: (left, right) => left ** right,
-  ['++']: operand => ++operand
+  ['**']: (left, right) => left ** right
 };
-['+', '-', '*', '/', '==', '<', '>', '>=', '<=', '%', '**', '++'].forEach(
-  op => {
-    topEnv[op] = operatorsMap[op];
-  }
-);
+['+', '-', '*', '/', '==', '<', '>', '>=', '<=', '%', '**'].forEach(op => {
+  topEnv[op] = operatorsMap[op];
+});
 
 export default function cell(input) {
   return function (...args) {
