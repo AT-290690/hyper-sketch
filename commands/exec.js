@@ -56,9 +56,16 @@ export const execute = CONSOLE => {
         if (out.count > 0) {
           out.result += "'" + out.count;
         }
+        const ignoreSet = new Set(value.match(/\$[a-zA-Z0-9]+/g));
         const tokenSet = new Set([...wordTokens]);
         const abc = [...ABC].filter(x => !tokenSet.has(x));
-        [...new Set(words.filter(x => !(x in DEPENDENCY_LIST)))]
+        [
+          ...new Set(
+            words.filter(
+              x => !(x in DEPENDENCY_LIST) && !ignoreSet.has('$' + x)
+            )
+          )
+        ]
           .sort((a, b) => (a.length > b.length ? -1 : 1))
           .slice(0, ABC.length)
           .forEach(x => {
