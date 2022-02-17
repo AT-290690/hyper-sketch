@@ -87,6 +87,7 @@ export const execute = CONSOLE => {
         } else {
           editor.setValue(encoded);
           CONSOLE.value = '';
+          CONSOLE.style.display = 'none';
         }
         setTimeout(() => editor.focus(), 250);
       }
@@ -124,6 +125,7 @@ export const execute = CONSOLE => {
           // .join('; ')
         );
         CONSOLE.value = '';
+        CONSOLE.style.display = 'none';
       }
       editor.focus();
 
@@ -144,6 +146,7 @@ export const execute = CONSOLE => {
           )
         );
         CONSOLE.value = '';
+        CONSOLE.style.display = 'none';
       }
       break;
     case 'UPDATE_DEPENDENCY_LIST':
@@ -160,6 +163,7 @@ export const execute = CONSOLE => {
           )
         );
         CONSOLE.value = '';
+        CONSOLE.style.display = 'none';
       }
       break;
     case 'CLEAR':
@@ -183,11 +187,13 @@ draw (-> (
     ;; background (30);
 )));`);
         CONSOLE.value = '';
+        CONSOLE.style.display = 'none';
       }
       break;
 
     case 'HELP':
-      CONSOLE.value = 'ENCODE: encode \nDECODE: \nCLEAR:  \nRESET:';
+      // CONSOLE.value = 'ENCODE: encode \nDECODE: \nCLEAR:  \nRESET:';
+      // CONSOLE.style.display = 'none';
       break;
     default:
       printErrors(CMD + ' does not exist!');

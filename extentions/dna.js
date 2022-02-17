@@ -3,6 +3,9 @@ import { VOID } from '../parser/cell.js';
 import { p5_remap } from './p5_remapping.min.js';
 import { canvasContainer, editor, State } from '../main.js';
 export const consoleElement = document.getElementById('console');
+export const commandElement = document.getElementById('command');
+export const editorContainer = document.getElementById('editor-container');
+
 export const printErrors = errors => {
   consoleElement.classList.remove('info_line');
   consoleElement.classList.add('error_line');

@@ -1,0 +1,1 @@
+:= (sumSeq; -> (start; end; -(* (end; * (0.5; + (end; 1))); -(* (start; * (0.5; - (start; 1)))))));

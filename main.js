@@ -1,8 +1,14 @@
 import { CodeMirror } from './libs/editor/cell.editor.bundle.js';
 import cell from './parser/cell.js';
-import { std, processing, consoleElement } from './extentions/dna.js';
+import {
+  std,
+  processing,
+  consoleElement,
+  editorContainer,
+  commandElement
+} from './extentions/dna.js';
 import { execute } from './commands/exec.js';
-export const editorContainer = document.getElementById('editor-container');
+
 export const editor = CodeMirror(editorContainer, {});
 export const State = {
   list: {},
@@ -48,12 +54,8 @@ window.addEventListener('resize', () => {
     canvasContainer.style.display = 'none';
     canvasContainer.innerHTML = '';
   }
-  if (consoleElement.style.height !== '50px') {
-    consoleElement.style.width = `90vw`;
-    consoleElement.style.height = `50px`;
-    consoleElement.style.border = 'none';
-  }
-  -editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
+
+  editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
 });
 
 document.addEventListener('keydown', e => {
@@ -99,27 +101,20 @@ document.addEventListener('keydown', e => {
       State.lastSelection = '';
     }
   } else if (e.key === 'Enter') {
-    if (activeElement === consoleElement) {
-      execute(consoleElement);
+    if (activeElement === commandElement) {
+      execute(commandElement);
+    }
+  } else if (e.key === 'Escape') {
+    if (commandElement.style.display === 'none') {
+      commandElement.style.display = 'block';
+      commandElement.focus();
+    } else {
+      commandElement.style.display = 'none';
+      editor.focus();
     }
   }
 });
 
-consoleElement.addEventListener('dblclick', () => {
-  if (consoleElement.style.height === '50px') {
-    consoleElement.style.height = `${window.innerHeight / 2 + 40}px`;
-    consoleElement.style.width = `${window.innerWidth}px`;
-    consoleElement.style.border = '1px solid var(--border)';
-    editor.setSize(undefined, window.innerHeight / 2 - 60);
-  } else {
-    consoleElement.style.width = `90vw`;
-    consoleElement.style.height = `50px`;
-    canvasContainer.style.display = 'block';
-    consoleElement.style.border = 'none';
-
-    editor.setSize(undefined, window.innerHeight - 80);
-  }
-});
 setTimeout(
   () => document.body.removeChild(document.getElementById('splash-screen')),
   1000
