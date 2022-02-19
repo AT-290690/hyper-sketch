@@ -122,10 +122,10 @@ specialForms['||'] = function (args, env) {
   return evaluate(args[args.length - 1], env);
 };
 
-specialForms['~'] = function (args, env) {
+specialForms['+?'] = function (args, env) {
   if (args.length !== 2) {
-    printErrors('Invalid number of arguments to ~');
-    throw new SyntaxError('Invalid number of arguments to ~');
+    printErrors('Invalid number of arguments to +?');
+    throw new SyntaxError('Invalid number of arguments to +?');
   }
   while (!!evaluate(args[0], env)) {
     evaluate(args[1], env);

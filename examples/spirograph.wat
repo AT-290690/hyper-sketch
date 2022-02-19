@@ -19,7 +19,7 @@ setup (-> (
     = (rad; * (height (); 0.25)); ;; compute radius for central circle
     background (180); ;; clear the screen
     := (i; 0);
-    ~ (< (i; length (sines)); 
+    +? (< (i; length (sines)); 
       => ( 
        .= (sines; i; PI); ;; start EVERYBODY facing NORTH
        +=(i)))));
@@ -36,7 +36,7 @@ setup (-> (
     push (); ;; start a transformation matrix
     translate ( * (width (); 0.5); * (height (); 0.5)); ;; move to middle of screen
     := (i; 0);
-      ~ (< (i; length (sines)); 
+      +? (< (i; length (sines)); 
         => ( 
          := (erad; 0); ;; radius for small "point" within circle... this is the 'pen' when tracing
       ;; setup for tracing
