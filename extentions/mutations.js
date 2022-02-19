@@ -1,5 +1,5 @@
-import { consoleElement, printErrors } from './dna.js';
-import { VOID } from '../parser/cell.js';
+import { consoleElement, printErrors } from './composition.js';
+import { VOID } from '../parser/parser.js';
 
 export const print = function (...values) {
   if (values.length === 0) {
@@ -156,4 +156,60 @@ export const bitwise = {
   ['~']: operand => ~operand,
   ['|']: (left, right) => left | right,
   ['&']: (left, right) => left & right
+};
+
+export const isSimilar = (a, b) => {
+  const typeA = typeof a,
+    typeB = typeof b;
+  if (typeA !== typeB) return false;
+  if (typeA === 'number' || typeA === 'string' || typeA === 'boolean') {
+    return a === b;
+  }
+  if (typeA === 'object') {
+    const isArrayA = Array.isArray(a),
+      isArrayB = Array.isArray(b);
+    if (isArrayA !== isArrayB) return false;
+    if (isArrayA && isArrayB) {
+      return a.length < b.length
+        ? a.every((item, index) => isSimilar(item, b[index]))
+        : b.every((item, index) => isSimilar(item, a[index]));
+    } else {
+      if (a === undefined || a === null || b === undefined || b === null)
+        return a === b;
+
+      for (const key in a) {
+        if (!isSimilar(a[key], b[key])) {
+          return false;
+        }
+      }
+      return true;
+    }
+  }
+};
+export const isEqual = (a, b) => {
+  const typeA = typeof a,
+    typeB = typeof b;
+  if (typeA !== typeB) return false;
+  if (typeA === 'number' || typeA === 'string' || typeA === 'boolean') {
+    return a === b;
+  }
+  if (typeA === 'object') {
+    const isArrayA = Array.isArray(a),
+      isArrayB = Array.isArray(b);
+    if (isArrayA !== isArrayB) return false;
+    if (isArrayA && isArrayB) {
+      if (a.length !== b.length) return false;
+      return a.every((item, index) => isEqual(item, b[index]));
+    } else {
+      if (a === undefined || a === null || b === undefined || b === null)
+        return a === b;
+      if (Object.keys(a).length !== Object.keys(b).length) return false;
+      for (const key in a) {
+        if (!isEqual(a[key], b[key])) {
+          return false;
+        }
+      }
+      return true;
+    }
+  }
 };

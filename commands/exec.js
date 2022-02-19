@@ -1,5 +1,5 @@
-import { consoleElement, printErrors } from '../extentions/dna.js';
-import { editor, State } from '../main.js';
+import { consoleElement, printErrors } from '../extentions/composition.js';
+import { editor, runP5, State } from '../main.js';
 import { DEPENDENCY_LIST } from '../extentions/dependencies.js';
 const HASH_TRESHOLD = 3;
 const ABC =
@@ -196,7 +196,12 @@ draw (-> (
         consoleElement.value = '';
       }
       break;
-
+    case 'SAVE':
+      runP5();
+      CONSOLE.value = '';
+      consoleElement.value = '';
+      CONSOLE.style.display = 'none';
+      break;
     case 'HELP':
       // CONSOLE.value = 'ENCODE: encode \nDECODE: \nCLEAR:  \nRESET:';
       // CONSOLE.style.display = 'none';

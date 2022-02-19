@@ -1,12 +1,12 @@
 import { CodeMirror } from './libs/editor/cell.editor.bundle.js';
-import cell from './parser/cell.js';
+import cell from './parser/parser.js';
 import {
   std,
   processing,
   consoleElement,
   editorContainer,
   commandElement
-} from './extentions/dna.js';
+} from './extentions/composition.js';
 import { execute } from './commands/exec.js';
 
 export const editor = CodeMirror(editorContainer, {});
@@ -29,6 +29,27 @@ const updateP5 = () => {
     canv.parent('canvas-container');
     P5.remove();
   }
+};
+
+export const runP5 = () => {
+  updateP5();
+  editor.setSize(window.innerWidth - 15);
+  canvasContainer.style.display = 'none';
+  canvasContainer.innerHTML = '';
+  // consoleElement.style.visibility = 'hidden';
+  consoleElement.value = '';
+  consoleElement.classList.add('info_line');
+  consoleElement.classList.remove('error_line');
+  P5 = new p5(engine => {
+    const { result, env, AST } = cell({ ...std, ...processing(engine) })(
+      `=> (
+        ${editor.getValue()}
+      )`
+    );
+    State.list = env;
+    State.AST = AST;
+    return result;
+  });
 };
 //  invoke: (inst, method, ...args) => inst[method](...args)
 const urlParams = new URLSearchParams(window.location.search);
@@ -64,24 +85,7 @@ document.addEventListener('keydown', e => {
     e = e || window.event;
     e.preventDefault();
     e.stopPropagation();
-    updateP5();
-    editor.setSize(window.innerWidth - 15);
-    canvasContainer.style.display = 'none';
-    canvasContainer.innerHTML = '';
-    // consoleElement.style.visibility = 'hidden';
-    consoleElement.value = '';
-    consoleElement.classList.add('info_line');
-    consoleElement.classList.remove('error_line');
-    P5 = new p5(engine => {
-      const { result, env, AST } = cell({ ...std, ...processing(engine) })(
-        `=> (
-          ${editor.getValue()}
-        )`
-      );
-      State.list = env;
-      State.AST = AST;
-      return result;
-    });
+    runP5();
   } else if (e.key.toLowerCase() === 'q' && e.ctrlKey) {
     e = e || window.event;
     e.preventDefault();

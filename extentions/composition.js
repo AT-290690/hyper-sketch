@@ -1,5 +1,12 @@
-import { array, object, bitwise, print } from './mutations.js';
-import { VOID } from '../parser/cell.js';
+import {
+  array,
+  object,
+  bitwise,
+  print,
+  isEqual,
+  isSimilar
+} from './mutations.js';
+import { VOID } from '../parser/parser.js';
 import { p5_remap } from './p5_remapping.min.js';
 import { canvasContainer, editor, State } from '../main.js';
 export const consoleElement = document.getElementById('console');
@@ -23,6 +30,8 @@ export const std = {
   ...bitwise,
   ...array,
   ...object,
+  isEqual,
+  isSimilar,
   setTimeout: (fn, ms) => setTimeout(() => fn(), ms),
   clearTimeout: id => clearTimeout(id)
 };

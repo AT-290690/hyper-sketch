@@ -1,4 +1,4 @@
-import { printErrors } from '../extentions/dna.js';
+import { printErrors } from '../extentions/composition.js';
 export const VOID = null;
 function parseExpression(program) {
   let match, expr;
@@ -91,6 +91,20 @@ specialForms['?'] = function (args, env) {
   } else {
     return 0;
   }
+};
+specialForms['*?'] = function (args, env) {
+  if (args.length === 0 || args.length % 2 !== 0) {
+    printErrors('Invalid number of arguments to *?');
+    throw new SyntaxError('Invalid number of arguments to *?');
+  }
+  let res = 0;
+  for (let i = 0; i < args.length; i += 2) {
+    if (!!evaluate(args[i], env)) {
+      evaluate(args[i + 1], env);
+      res = 1;
+    }
+  }
+  return res;
 };
 specialForms['&&'] = function (args, env) {
   if (args.length === 0) {
