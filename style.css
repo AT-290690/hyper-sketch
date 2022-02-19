@@ -89,7 +89,7 @@ main {
   width: 90vw;
   resize: none;
   position: absolute;
-  pointer-events: none;
+  /* pointer-events: none; */
   bottom: 0;
 }
 #command {

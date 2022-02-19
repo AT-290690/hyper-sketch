@@ -115,6 +115,14 @@ document.addEventListener('keydown', e => {
   }
 });
 
+consoleElement.addEventListener('dblclick', () => {
+  if (commandElement.style.display === 'none') {
+    commandElement.style.display = 'block';
+    commandElement.focus();
+  } else {
+    commandElement.style.display = 'none';
+  }
+});
 setTimeout(
   () => document.body.removeChild(document.getElementById('splash-screen')),
   1000

@@ -1,4 +1,4 @@
-import { printErrors } from '../extentions/dna.js';
+import { consoleElement, printErrors } from '../extentions/dna.js';
 import { editor, State } from '../main.js';
 import { DEPENDENCY_LIST } from '../extentions/dependencies.js';
 const HASH_TRESHOLD = 3;
@@ -87,6 +87,7 @@ export const execute = CONSOLE => {
         } else {
           editor.setValue(encoded);
           CONSOLE.value = '';
+          consoleElement.value = '';
           CONSOLE.style.display = 'none';
         }
         setTimeout(() => editor.focus(), 250);
@@ -125,6 +126,7 @@ export const execute = CONSOLE => {
           // .join('; ')
         );
         CONSOLE.value = '';
+        consoleElement.value = '';
         CONSOLE.style.display = 'none';
       }
       editor.focus();
@@ -146,7 +148,7 @@ export const execute = CONSOLE => {
           )
         );
         CONSOLE.value = '';
-        CONSOLE.style.display = 'none';
+        consoleElement.value = '';
       }
       break;
     case 'UPDATE_DEPENDENCY_LIST':
@@ -163,7 +165,8 @@ export const execute = CONSOLE => {
           )
         );
         CONSOLE.value = '';
-        CONSOLE.style.display = 'none';
+        consoleElement.value = '';
+        // CONSOLE.style.display = 'none';
       }
       break;
     case 'CLEAR':
@@ -171,6 +174,8 @@ export const execute = CONSOLE => {
         window.history.pushState({}, document.title, window.location.pathname);
         editor.setValue('');
         CONSOLE.value = '';
+        // CONSOLE.style.display = 'none';
+        consoleElement.value = '';
       }
       break;
     case 'RESET':
@@ -187,7 +192,8 @@ draw (-> (
     ;; background (30);
 )));`);
         CONSOLE.value = '';
-        CONSOLE.style.display = 'none';
+        // CONSOLE.style.display = 'none';
+        consoleElement.value = '';
       }
       break;
 
