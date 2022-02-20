@@ -98,6 +98,15 @@ export const processing = engine => ({
   mouseX: () => engine.mouseX,
   mouseY: () => engine.mouseY,
   frameCount: () => engine.frameCount,
+  keyPressed: callback => {
+    if (State.previousKeypressEvent) {
+      document.removeEventListener('keypress', State.previousKeypressEvent);
+    }
+    State.previousKeypressEvent = e => {
+      if (State.activeWindow === canvasContainer) callback(e.key);
+    };
+    document.addEventListener('keypress', State.previousKeypressEvent);
+  },
   ARROW: 'default',
   AUTO: 'auto',
   AXES: 'axes',

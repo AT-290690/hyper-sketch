@@ -8,13 +8,13 @@ import {
   commandElement
 } from './extentions/composition.js';
 import { execute } from './commands/exec.js';
-
 export const editor = CodeMirror(editorContainer, {});
 export const State = {
   list: {},
   lastSelection: '',
   drawMode: undefined,
-  AST: {}
+  AST: {},
+  activeWindow: editorContainer
 };
 
 editor.changeFontSize('12px');
@@ -70,6 +70,15 @@ draw (-> (
 )));`);
 }
 export const canvasContainer = document.getElementById('canvas-container');
+canvasContainer.addEventListener(
+  'click',
+  () => (State.activeWindow = canvasContainer)
+);
+editorContainer.addEventListener(
+  'click',
+  () => (State.activeWindow = editorContainer)
+);
+
 window.addEventListener('resize', () => {
   if (canvasContainer.innerHTML) {
     canvasContainer.style.display = 'none';
@@ -109,6 +118,7 @@ document.addEventListener('keydown', e => {
       execute(commandElement);
     }
   } else if (e.key === 'Escape') {
+    State.activeWindow = editorContainer;
     if (commandElement.style.display === 'none') {
       commandElement.style.display = 'block';
       commandElement.focus();

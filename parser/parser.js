@@ -81,6 +81,7 @@ const specialForms = Object.create(null);
 
 specialForms['?'] = function (args, env) {
   if (args.length > 3 || args.length <= 1) {
+    console.error(args);
     printErrors('Invalid number of arguments to ?');
     throw new SyntaxError('Invalid number of arguments to ?');
   }
@@ -189,6 +190,7 @@ specialForms['=>'] = function (args, env) {
 };
 specialForms[':='] = function (args, env) {
   if (args?.[0].type !== 'word' || args.length > 2) {
+    console.error(args);
     printErrors('Invalid use of operation :=');
     throw new SyntaxError('Invalid use of operation :=');
   }
@@ -292,11 +294,13 @@ specialForms['.='] = function (args, env) {
       }
     }
   }
-  printErrors(`Tried setting an undefined variable: ${valName}`);
-  throw new ReferenceError(`Tried setting an undefined variable: ${valName}`);
+
+  // printErrors(`Tried setting an undefined variable: ${valName}`);
+  // throw new ReferenceError(`Tried setting an undefined variable: ${valName}`);
 };
 specialForms['.'] = function (args, env) {
   if (args.length !== 2) {
+    console.error(args);
     printErrors('Invalid use of operation .');
     throw new SyntaxError('Invalid use of operation .');
   }
@@ -326,8 +330,9 @@ specialForms['.'] = function (args, env) {
       }
     }
   }
-  printErrors(`Tried setting an undefined variable: ${valName}`);
-  throw new ReferenceError(`Tried setting an undefined variable: ${valName}`);
+
+  // printErrors(`Tried setting an undefined variable: ${valName}`);
+  // throw new ReferenceError(`Tried setting an undefined variable: ${valName}`);
 };
 const topEnv = Object.create(null);
 const operatorsMap = {
@@ -336,6 +341,7 @@ const operatorsMap = {
   ['*']: (first, ...args) => args.reduce((acc, x) => (acc *= x), first),
   ['/']: (first, ...args) => args.reduce((acc, x) => (acc /= x), first),
   ['==']: (first, ...args) => +args.every(x => first === x),
+  ['!=']: (first, ...args) => +args.every(x => first != x),
   ['>']: (first, ...args) => +args.every(x => first > x),
   ['<']: (first, ...args) => +args.every(x => first < x),
   ['>=']: (first, ...args) => +args.every(x => first >= x),
@@ -343,9 +349,11 @@ const operatorsMap = {
   ['%']: (left, right) => left % right,
   ['**']: (left, right) => left ** (right ?? 2)
 };
-['+', '-', '*', '/', '==', '<', '>', '>=', '<=', '%', '**'].forEach(op => {
-  topEnv[op] = operatorsMap[op];
-});
+['+', '-', '*', '/', '==', '<', '>', '>=', '<=', '%', '**', '!='].forEach(
+  op => {
+    topEnv[op] = operatorsMap[op];
+  }
+);
 
 export default function cell(input) {
   return function (...args) {
