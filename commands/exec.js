@@ -6,7 +6,7 @@ const ABC =
   'abcdefghijklmnopqrstuvwxyz'.toUpperCase() + 'abcdefghijklmnopqrstuvwxyz';
 
 export const execute = CONSOLE => {
-  const CMD = CONSOLE.value.trim().toUpperCase();
+  const CMD = CONSOLE.value.split(' ')[0].trim().toUpperCase();
 
   switch (CMD) {
     case 'ENCODE':
@@ -15,11 +15,11 @@ export const execute = CONSOLE => {
         const limit = 2000;
         const value = editor.getValue().replace(/;;.+/g, '');
         const wordTokens = value
-          .replace(/[^"0-9a-zA-Z]+/g, ' ')
+          .replace(/[^0-9a-zA-Z]+/g, ' ')
           .replace(/\s+/g, ' ')
           .trim()
           .split(' ')
-          .filter(x => !x.includes('"') && isNaN(+x));
+          .filter(x => isNaN(+x));
 
         const words = wordTokens.filter(x => x.length > HASH_TRESHOLD);
         const out = [...new Set(words)]
@@ -194,6 +194,21 @@ draw (-> (
         CONSOLE.value = '';
         // CONSOLE.style.display = 'none';
         consoleElement.value = '';
+      }
+      break;
+    case '>.':
+      {
+        const str = CONSOLE.value.split('>. ')[1];
+        CONSOLE.value = str
+          .split('')
+          .map((_, i) => str.charCodeAt(i))
+          .join(';');
+      }
+      break;
+    case '<.':
+      {
+        const str = CONSOLE.value.split('<. ')[1];
+        CONSOLE.value = String.fromCharCode(...str.split(';'));
       }
       break;
     case 'SAVE':

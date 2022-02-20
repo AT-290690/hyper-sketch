@@ -4,8 +4,8 @@
 
 := (NUMSINES; 5); ;; how many of these things can we do at once?
 := (sines; array (NUMSINES)); ;; an array to hold all the current angles
-:= (rad; void ()); ;; an initial radius value for the central sine
-:= (i; void ()); ;; a counter variable
+:= (rad); ;; an initial radius value for the central sine
+:= (i); ;; a counter variable
 
 ;; play with these to get a sense of what's going on:
 := (fund; 0.005); ;; the speed of the central sine
@@ -21,7 +21,7 @@ setup (-> (
     := (i; 0);
     ++? (< (i; length (sines)); 
       => ( 
-       .= (sines; i; PI); ;; start EVERYBODY facing NORTH
+       .= (sines; i; P5_CONST_PI); ;; start EVERYBODY facing NORTH
        +=(i)))));
 );
 
@@ -54,7 +54,7 @@ setup (-> (
       ? (trace;  ellipse(0; 0; erad; erad)); ;; draw with erad if tracing
       pop (); ;; go down one level
       translate (0; radius); ;; move into position for next sine
-      .= (sines; i; % (+ (. (sines; i); fund; * (fund; i; ratio)); TWO_PI)); ;; update angle based on fundamental
+      .= (sines; i; % (+ (. (sines; i); fund; * (fund; i; ratio)); P5_CONST_TWO_PI)); ;; update angle based on fundamental
       +=(i)));
       pop () ;; pop down final transformation
   )));

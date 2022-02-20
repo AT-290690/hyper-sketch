@@ -25,7 +25,7 @@
   fill (255; 100);
   ellipse (. (pos; "x"); . (pos; "y"); 10; 10))));
 
-:= (move; void ());
+:= (move);
 
 setup (-> ( => (
     createCanvas (); 

@@ -91,7 +91,8 @@ export const object = {
     return arr;
   },
 
-  ['matrix']: (...dimensions) => constructMatrix(dimensions)
+  ['matrix']: (...dimensions) => constructMatrix(dimensions),
+  ['string']: (...characters) => String.fromCharCode(...characters)
   // ['iterateMatrix']: (matrix, callback) => iterateMatrix(matrix, callback),
   // ['for']: (start, end) =>
   //   start > end
