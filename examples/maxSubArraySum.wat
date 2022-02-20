@@ -1,7 +1,8 @@
 := (maxSubArray; -> (nums; => (
   := (maxSoFar; . (nums; 0));
   := (maxGlobal; maxSoFar);
-  ++ (:= (i; 1); - (length (nums); 1); => (
+  := (i; 1);
+  ++? (< (i; - (length (nums); 1)); => (
     = (maxGlobal; 
         max (maxGlobal; 
             = (maxSoFar; max (0; + (maxSoFar; . (nums; i))))));

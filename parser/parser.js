@@ -137,45 +137,13 @@ specialForms['||'] = function (args, env) {
   return evaluate(args[args.length - 1], env);
 };
 
-specialForms['+?'] = function (args, env) {
+specialForms['++?'] = function (args, env) {
   if (args.length !== 2) {
     printErrors('Invalid number of arguments to +?');
     throw new SyntaxError('Invalid number of arguments to +?');
   }
   while (!!evaluate(args[0], env)) {
     evaluate(args[1], env);
-  }
-  // Cell has no undefined so we return void when there's no meaningful result.
-  return VOID;
-};
-specialForms['++'] = function (args, env) {
-  if (args.length !== 3) {
-    printErrors('Invalid number of arguments to ++');
-    throw new SyntaxError('Invalid number of arguments to ++');
-  }
-  const range = [];
-  for (let x = 0; x <= 1; x++) {
-    if (
-      args[x].type !== 'value' &&
-      args[x].type !== 'word' &&
-      args[x].type !== 'apply'
-    ) {
-      printErrors('for Invalid argument for for ' + args[x].type);
-      throw new SyntaxError('for Invalid argument for for ' + args[x].type);
-    }
-    range[x] =
-      args[x].type === 'value' ? args[x].value : evaluate(args[x], env);
-  }
-
-  const [start, end] = range;
-  if (start > end) {
-    for (let i = start; i > end; i--) {
-      evaluate(args[2], env);
-    }
-  } else {
-    for (let i = start; i < end; i++) {
-      evaluate(args[2], env);
-    }
   }
   // Cell has no undefined so we return void when there's no meaningful result.
   return VOID;
@@ -219,6 +187,27 @@ specialForms['+='] = function (args, env) {
   for (let scope = env; scope; scope = Object.getPrototypeOf(scope)) {
     if (Object.prototype.hasOwnProperty.call(scope, valName)) {
       value += inc;
+      scope[valName] = value;
+      return value;
+    }
+  }
+  printErrors(`Tried incrementing an undefined variable: ${valName}`);
+  throw new ReferenceError(
+    `Tried incrementing an undefined variable: ${valName}`
+  );
+};
+specialForms['-='] = function (args, env) {
+  if (args.length === 0 || args[0].type !== 'word') {
+    console.error(args);
+    printErrors('Invalid use of operation -=');
+    throw new SyntaxError('Invalid use of operation -=');
+  }
+  const valName = args[0].name;
+  let value = evaluate(args[0], env);
+  const inc = args[1] ? evaluate(args[1], env) : 1;
+  for (let scope = env; scope; scope = Object.getPrototypeOf(scope)) {
+    if (Object.prototype.hasOwnProperty.call(scope, valName)) {
+      value -= inc;
       scope[valName] = value;
       return value;
     }
@@ -288,10 +277,10 @@ specialForms['.='] = function (args, env) {
   const value = evaluate(args[2], env);
   for (let scope = env; scope; scope = Object.getPrototypeOf(scope)) {
     if (Object.prototype.hasOwnProperty.call(scope, valName)) {
-      if (prop in scope[valName]) {
-        scope[valName][prop] = value;
-        return value;
-      }
+      // if (prop in scope[valName]) {
+      scope[valName][prop] = value;
+      return value;
+      // }
     }
   }
 
@@ -325,9 +314,9 @@ specialForms['.'] = function (args, env) {
 
   for (let scope = env; scope; scope = Object.getPrototypeOf(scope)) {
     if (Object.prototype.hasOwnProperty.call(scope, valName)) {
-      if (prop in scope[valName]) {
-        return scope[valName][prop];
-      }
+      // if (prop in scope[valName]) {
+      return scope[valName][prop];
+      // }
     }
   }
 

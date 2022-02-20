@@ -107,6 +107,33 @@ export const processing = engine => ({
     };
     document.addEventListener('keypress', State.previousKeypressEvent);
   },
+  keyReleased: callback => {
+    if (State.previousKeyreleaseEvent) {
+      document.removeEventListener('keyup', State.previousKeyreleaseEvent);
+    }
+    State.previousKeypressEvent = e => {
+      if (State.activeWindow === canvasContainer) callback(e.key);
+    };
+    document.addEventListener('keyup', State.previousKeyreleaseEvent);
+  },
+  mousePressed: callback => {
+    if (State.previousMousepressEvent) {
+      document.removeEventListener('mousedown', State.previousMousepressEvent);
+    }
+    State.previousMousepressEvent = () => {
+      if (State.activeWindow === canvasContainer) callback();
+    };
+    document.addEventListener('mousedown', State.previousMousepressEvent);
+  },
+  mouseReleased: callback => {
+    if (State.previousMousereleaseEvent) {
+      document.removeEventListener('mouseup', State.previousMousereleaseEvent);
+    }
+    State.previousMousereleaseEvent = () => {
+      if (State.activeWindow === canvasContainer) callback();
+    };
+    document.addEventListener('mouseup', State.previousMousereleaseEvent);
+  },
   ARROW: 'default',
   AUTO: 'auto',
   AXES: 'axes',

@@ -30,8 +30,10 @@
   draw ( -> (=> (
     background(50);
     generate ();
-   ++ (:= (x; 1); - (columns; 1); => (
-      ++ (:= (y; 1); - (rows; 1) ; => (
+    := (x; 1);
+   ++? (< (x; - (columns; 1)); => (
+      := (y; 1);
+      ++? (< (y; - (rows; 1)); => (
                := (current; getCell (board; x; y));
              ? (== (. (current; "state"); 1); fill (33); fill (125));
                rect ( * (x; $Res); * (y; $Res); - ($Res; 1); - ($Res; 1));
@@ -44,15 +46,15 @@
     => (
       ;; Loop through every spot in our 2D array and check spots neighbors
         := (x; 1); 
-         +? (< (x; - (columns; 1)); => (
+         ++? (< (x; - (columns; 1)); => (
            := (y; 1);
-           +? (< (y; - (rows; 1)); => (
+           ++? (< (y; - (rows; 1)); => (
             ;; Add up all the states in a 3x3 surrounding grid
               := (neighbors; 0);
                  := (i; -1); 
-                   +? (<= (i; 1); => (
+                   ++? (<= (i; 1); => (
                      := (j; -1);
-                     +? (<= (j; 1); => (
+                     ++? (<= (j; 1); => (
                        := (score; getCell (board; + (x; i); + (y; j)));
                        = (neighbors; + (neighbors; . (score; "state")));
                        +=(j)));
