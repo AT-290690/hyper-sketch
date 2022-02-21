@@ -11,6 +11,8 @@
 := (fund; 0.005); ;; the speed of the central sine
 := (ratio; 1); ;; what multiplier for speed is each additional sine?
 := (gamma; 50); ;; how opaque is the tracing system
+:= (PI; 3.14159265359);
+:= (TWO_PI; * (PI; 2));
 
 := (trace; 0); ;; are we tracing?
 setup (-> ( 
@@ -21,7 +23,7 @@ setup (-> (
     := (i; 0);
     ++? (< (i; length (sines)); 
       => ( 
-       .= (sines; i; P5_CONST_PI); ;; start EVERYBODY facing NORTH
+       .= (sines; i; PI); ;; start EVERYBODY facing NORTH
        +=(i)))));
 );
 
@@ -54,7 +56,7 @@ setup (-> (
       ? (trace;  ellipse(0; 0; erad; erad)); ;; draw with erad if tracing
       pop (); ;; go down one level
       translate (0; radius); ;; move into position for next sine
-      .= (sines; i; % (+ (. (sines; i); fund; * (fund; i; ratio)); P5_CONST_TWO_PI)); ;; update angle based on fundamental
+      .= (sines; i; % (+ (. (sines; i); fund; * (fund; i; ratio)); TWO_PI)); ;; update angle based on fundamental
       +=(i)));
       pop () ;; pop down final transformation
   )));
