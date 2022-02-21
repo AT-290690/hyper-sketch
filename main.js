@@ -51,24 +51,7 @@ export const runP5 = () => {
     return result;
   });
 };
-//  invoke: (inst, method, ...args) => inst[method](...args)
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.has('s')) {
-  editor.setValue(window.location.search.split('?s=')[1].trim());
-  execute({ value: 'decode' });
-  // .match(/([^()]+|[^(]+\([^)]*\)[^()]*)/g).map(x=>x.length > 1 ? '\n' + x : 'x')
-} else {
-  editor.setValue(`
-setup (-> (
-  => (
-    ;; createCanvas ();
-))); 
-  
-draw (-> (
-  => (
-    ;; background (30);
-)));`);
-}
+
 export const canvasContainer = document.getElementById('canvas-container');
 canvasContainer.addEventListener(
   'click',
@@ -137,7 +120,24 @@ consoleElement.addEventListener('dblclick', () => {
     commandElement.style.display = 'none';
   }
 });
-setTimeout(
-  () => document.body.removeChild(document.getElementById('splash-screen')),
-  1000
-);
+setTimeout(() => {
+  document.body.removeChild(document.getElementById('splash-screen'));
+  //  invoke: (inst, method, ...args) => inst[method](...args)
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('s')) {
+    editor.setValue(window.location.search.split('?s=')[1].trim());
+    execute({ value: 'decode' });
+    // .match(/([^()]+|[^(]+\([^)]*\)[^()]*)/g).map(x=>x.length > 1 ? '\n' + x : 'x')
+  } else {
+    editor.setValue(`
+setup (-> (
+  => (
+    ;; createCanvas ();
+))); 
+  
+draw (-> (
+  => (
+    ;; background (30);
+)));`);
+  }
+}, 1000);
