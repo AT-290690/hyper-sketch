@@ -90,7 +90,7 @@ export const object = {
     }
     return arr;
   },
-
+  ['parseInt']: (number, base) => parseInt(number.toString(), base),
   ['matrix']: (...dimensions) => constructMatrix(dimensions),
   ['string']: (...characters) => String.fromCharCode(...characters)
   // ['iterateMatrix']: (matrix, callback) => iterateMatrix(matrix, callback),
