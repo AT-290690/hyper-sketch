@@ -50,22 +50,6 @@ export const object = {
     return object;
   },
 
-  ['object']: (...entries) => {
-    try {
-      let count = 0;
-      return Object.fromEntries(
-        entries.reduce((acc, item, i) => {
-          if (i % 2) {
-            acc[count].push(item);
-            count++;
-          } else acc[count] = [item];
-          return acc;
-        }, [])
-      );
-    } catch (err) {
-      printErrors(err);
-    }
-  },
   ['array']: size => {
     const arr = new Array(size ?? 0);
     return arr.fill(null).map(() => null);

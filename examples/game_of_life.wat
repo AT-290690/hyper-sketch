@@ -17,8 +17,8 @@
         == (j; 0);
         == (i; - (columns; 1));
         == (j; - (rows; 1))); 
-          object ("state"; 0; "next"; 0); 
-          object ("state"; floor (random(2)); "next"; floor (random(2))))))))))));
+          :: ("state"; 0; "next"; 0); 
+          :: ("state"; floor (random(2)); "next"; floor (random(2))))))))))));
     
   setup ( -> ( => (
     createCanvas ();

@@ -277,15 +277,10 @@ specialForms['.='] = function (args, env) {
   const value = evaluate(args[2], env);
   for (let scope = env; scope; scope = Object.getPrototypeOf(scope)) {
     if (Object.prototype.hasOwnProperty.call(scope, valName)) {
-      // if (prop in scope[valName]) {
       scope[valName][prop] = value;
       return value;
-      // }
     }
   }
-
-  // printErrors(`Tried setting an undefined variable: ${valName}`);
-  // throw new ReferenceError(`Tried setting an undefined variable: ${valName}`);
 };
 specialForms['.'] = function (args, env) {
   if (args.length !== 2) {
@@ -293,20 +288,7 @@ specialForms['.'] = function (args, env) {
     printErrors('Invalid use of operation .');
     throw new SyntaxError('Invalid use of operation .');
   }
-  // if (
-  //   args[1].type !== 'value' &&
-  //   args[1].type !== 'word' &&
-  //   args[1].type !== 'apply'
-  // ) {
-  //   printErrors(
-  //     'Property must be either a word or a value for operation . but got ' +
-  //       args[1].type
-  //   );
-  //   throw new SyntaxError(
-  //     'Property must be either a word or a value for operation . but got ' +
-  //       args[1].type
-  //   );
-  // }
+
   const valName = args[0].name;
 
   const prop =
@@ -314,15 +296,30 @@ specialForms['.'] = function (args, env) {
 
   for (let scope = env; scope; scope = Object.getPrototypeOf(scope)) {
     if (Object.prototype.hasOwnProperty.call(scope, valName)) {
-      // if (prop in scope[valName]) {
       return scope[valName][prop];
-      // }
     }
   }
-
-  // printErrors(`Tried setting an undefined variable: ${valName}`);
-  // throw new ReferenceError(`Tried setting an undefined variable: ${valName}`);
 };
+
+specialForms['::'] = function (args, env) {
+  try {
+    let count = 0;
+    return Object.fromEntries(
+      args.reduce((acc, item, i) => {
+        if (i % 2) {
+          acc[count].push(
+            item.type === 'value' ? item.value : evaluate(item, env)
+          );
+          count++;
+        } else acc[count] = [item.value];
+        return acc;
+      }, [])
+    );
+  } catch (err) {
+    printErrors(err);
+  }
+};
+
 const topEnv = Object.create(null);
 const operatorsMap = {
   ['+']: (first, ...args) => args.reduce((acc, x) => (acc += x), first),

@@ -1,6 +1,6 @@
  := ($mover; -> (x; y; => (
     := (vec; 
-   object (
+   :: (
     "pos"; createVector (x; y);
     "vel"; createVector (1; -1);
     "acc"; createVector (1; 1))
