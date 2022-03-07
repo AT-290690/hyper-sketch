@@ -1,4 +1,4 @@
-import { consoleElement, printErrors } from './composition.js';
+import { consoleElement } from './composition.js';
 import { VOID } from '../parser/parser.js';
 
 export const print = function (...values) {
