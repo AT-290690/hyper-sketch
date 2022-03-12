@@ -22,6 +22,22 @@ export const execute = CONSOLE => {
         );
       }
       break;
+    case 'ENCODE_HSV':
+      {
+        encodeUrl(
+          editor.getValue(),
+          DEPENDENCY_LIST,
+          encoded => {
+            editor.setValue(encoded);
+            CONSOLE.value = '';
+            consoleElement.value = '';
+            setTimeout(() => editor.focus(), 250);
+          },
+          2000,
+          'https://at-290690.github.io/hsv/'
+        );
+      }
+      break;
     case 'DECODE':
       {
         decodeUrl(editor.getValue(), DEPENDENCY_LIST, url => {

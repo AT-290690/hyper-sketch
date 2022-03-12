@@ -8,7 +8,8 @@ export const encodeUrl = (
   source,
   DEPENDENCY_LIST,
   callback = () => true,
-  limit = 2000
+  limit = 2000,
+  href = location.href
 ) => {
   const value = source.replace(/;;.+/g, '');
   const wordTokens = value
@@ -66,7 +67,7 @@ export const encodeUrl = (
     });
 
   const encoded =
-    location.href +
+    href +
     '?s=' +
     LZUTF8.compress(out.result.trim(), {
       outputEncoding: 'Base64'
@@ -82,8 +83,13 @@ export const encodeUrl = (
   }
 };
 
-export const decodeUrl = (url, DEPENDENCY_LIST, callback) => {
-  const content = url.trim().replace(location.href + '?s=', '');
+export const decodeUrl = (
+  url,
+  DEPENDENCY_LIST,
+  callback,
+  href = location.href
+) => {
+  const content = url.trim().replace(href + '?s=', '');
   const value = LZUTF8.decompress(content, {
     inputEncoding: 'Base64',
     outputEncoding: 'String'
