@@ -133,11 +133,3 @@ draw (-> (
     ;; background (30);
 )));`);
 }, 1000);
-
-// window.addEventListener('resize', () => {
-//   if (canvasContainer.innerHTML) {
-//     canvasContainer.style.display = 'none';
-//     canvasContainer.innerHTML = '';
-//   }
-//   editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
-// });
