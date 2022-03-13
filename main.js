@@ -122,14 +122,7 @@ consoleElement.addEventListener('dblclick', () => {
 });
 setTimeout(() => {
   document.body.removeChild(document.getElementById('splash-screen'));
-  //  invoke: (inst, method, ...args) => inst[method](...args)
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('s')) {
-    editor.setValue(window.location.search.split('?s=')[1].trim());
-    execute({ value: 'decode' });
-    // .match(/([^()]+|[^(]+\([^)]*\)[^()]*)/g).map(x=>x.length > 1 ? '\n' + x : 'x')
-  } else {
-    editor.setValue(`
+  editor.setValue(`
 setup (-> (
   => (
     ;; createCanvas ();
@@ -139,5 +132,12 @@ draw (-> (
   => (
     ;; background (30);
 )));`);
-  }
 }, 1000);
+
+// window.addEventListener('resize', () => {
+//   if (canvasContainer.innerHTML) {
+//     canvasContainer.style.display = 'none';
+//     canvasContainer.innerHTML = '';
+//   }
+//   editor.setSize(window.innerWidth - 15, window.innerHeight - 80);
+// });

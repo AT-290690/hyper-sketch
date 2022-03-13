@@ -8,22 +8,6 @@ export const execute = CONSOLE => {
   switch (CMD) {
     case 'ENCODE':
       {
-        window.history.pushState({}, document.title, window.location.pathname);
-        encodeUrl(
-          editor.getValue(),
-          DEPENDENCY_LIST,
-          encoded => {
-            editor.setValue(encoded);
-            CONSOLE.value = '';
-            consoleElement.value = '';
-            setTimeout(() => editor.focus(), 250);
-          },
-          2000
-        );
-      }
-      break;
-    case 'ENCODE_HSV':
-      {
         encodeUrl(
           editor.getValue(),
           DEPENDENCY_LIST,
