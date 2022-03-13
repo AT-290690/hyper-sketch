@@ -9,7 +9,7 @@ const print = function (...values) {
   if (values.length === 0) {
     return VOID;
   }
-  values.map(x => (consoleElement.value += `( ${JSON.stringify(x)} ) `));
+  values.forEach(x => (consoleElement.value += `( ${JSON.stringify(x)} ) `));
   return values;
 };
 const constructMatrix = dimensions => {
