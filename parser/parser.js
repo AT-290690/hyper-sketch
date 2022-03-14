@@ -282,6 +282,23 @@ specialForms['.='] = function (args, env) {
     }
   }
 };
+specialForms['.-'] = function (args, env) {
+  if (args.length !== 2 || args[0].type !== 'word') {
+    console.error(args);
+    printErrors('Invalid use of operation .-');
+    throw new SyntaxError('Invalid use of operation .-');
+  }
+
+  const valName = args[0].name;
+  const prop = evaluate(args[1], env);
+  for (let scope = env; scope; scope = Object.getPrototypeOf(scope)) {
+    if (Object.prototype.hasOwnProperty.call(scope, valName)) {
+      const value = scope[valName][prop];
+      delete scope[valName][prop];
+      return value;
+    }
+  }
+};
 specialForms['.'] = function (args, env) {
   if (args.length !== 2) {
     console.error(args);
