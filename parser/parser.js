@@ -318,6 +318,23 @@ specialForms['.'] = function (args, env) {
   }
 };
 
+specialForms['...'] = function (args, env) {
+  if (!args.length) {
+    console.error(args);
+    printErrors('Invalid number of arguments to ...');
+    throw new SyntaxError('Invalid number of arguments to ...');
+  }
+  try {
+    const [first, ...rest] = args;
+    return {
+      ...evaluate(first, env),
+      ...rest.reduce((acc, item) => ({ ...acc, ...evaluate(item, env) }), {})
+    };
+  } catch (err) {
+    printErrors(err);
+  }
+};
+
 specialForms['::'] = function (args, env) {
   try {
     let count = 0;

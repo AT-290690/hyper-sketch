@@ -57,19 +57,20 @@ const object = {
     return array;
   },
   ['assignProperty']: (entity, key, item) => (entity[key] = item),
-  ['range']: (start, end) => {
+  ['range']: (start, end, step = 1) => {
     const arr = [];
     if (start > end) {
-      for (let i = start; i >= end; i--) {
+      for (let i = start; i >= end; i -= step) {
         arr.push(i);
       }
     } else {
-      for (let i = start; i <= end; i++) {
+      for (let i = start; i <= end; i += step) {
         arr.push(i);
       }
     }
     return arr;
   },
+
   ['parseInt']: (number, base) => parseInt(number.toString(), base),
   ['matrix']: (...dimensions) => constructMatrix(dimensions),
   ['string']: (...characters) => String.fromCharCode(...characters)
