@@ -2,7 +2,6 @@ import { VOID } from '../parser/parser.js';
 import { p5_remap } from './p5_remapping.min.js';
 import { canvasContainer, editor, State } from '../main.js';
 export const consoleElement = document.getElementById('console');
-export const commandElement = document.getElementById('command');
 export const editorContainer = document.getElementById('editor-container');
 
 const print = function (...values) {

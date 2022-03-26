@@ -4,8 +4,7 @@ import {
   std,
   processing,
   consoleElement,
-  editorContainer,
-  commandElement
+  editorContainer
 } from './extentions/composition.js';
 import { execute } from './commands/exec.js';
 export const editor = CodeMirror(editorContainer, {});
@@ -97,29 +96,19 @@ document.addEventListener('keydown', e => {
       State.lastSelection = '';
     }
   } else if (e.key === 'Enter') {
-    if (activeElement === commandElement) {
-      execute(commandElement);
+    if (activeElement === consoleElement) {
+      execute(consoleElement);
     }
   } else if (e.key === 'Escape') {
-    State.activeWindow = editorContainer;
-    if (commandElement.style.display === 'none') {
-      commandElement.style.display = 'block';
-      commandElement.focus();
-    } else {
-      commandElement.style.display = 'none';
+    if (activeElement === consoleElement) {
       editor.focus();
+      State.activeWindow = editorContainer;
+    } else if (State.activeWindow === editorContainer) {
+      consoleElement.focus();
     }
   }
 });
 
-consoleElement.addEventListener('dblclick', () => {
-  if (commandElement.style.display === 'none') {
-    commandElement.style.display = 'block';
-    commandElement.focus();
-  } else {
-    commandElement.style.display = 'none';
-  }
-});
 setTimeout(() => {
   document.body.removeChild(document.getElementById('splash-screen'));
   editor.setValue(`

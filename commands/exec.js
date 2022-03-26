@@ -1,4 +1,4 @@
-import { consoleElement, printErrors } from '../extentions/composition.js';
+import { printErrors } from '../extentions/composition.js';
 import { editor, runP5, State } from '../main.js';
 import { decodeUrl, encodeUrl, updateDepsList } from './utils.js';
 import { DEPENDENCY_LIST } from '../extentions/dependencies.js';
@@ -14,7 +14,6 @@ export const execute = CONSOLE => {
           encoded => {
             editor.setValue(encoded);
             CONSOLE.value = '';
-            consoleElement.value = '';
             setTimeout(() => editor.focus(), 250);
           },
           2000,
@@ -27,7 +26,6 @@ export const execute = CONSOLE => {
         decodeUrl(editor.getValue(), DEPENDENCY_LIST, url => {
           editor.setValue(url);
           CONSOLE.value = '';
-          consoleElement.value = '';
           editor.focus();
         });
       }
@@ -48,14 +46,12 @@ export const execute = CONSOLE => {
           )
         );
         CONSOLE.value = '';
-        consoleElement.value = '';
       }
       break;
     case 'UPDATE_DEPENDENCY_LIST':
       {
         updateDepsList(State.list);
         CONSOLE.value = '';
-        consoleElement.value = '';
       }
       break;
     case 'CLEAR':
@@ -63,7 +59,6 @@ export const execute = CONSOLE => {
         window.history.pushState({}, document.title, window.location.pathname);
         editor.setValue('');
         CONSOLE.value = '';
-        consoleElement.value = '';
       }
       break;
     case 'RESET':
@@ -80,7 +75,6 @@ draw (-> (
     ;; background (30);
 )));`);
         CONSOLE.value = '';
-        consoleElement.value = '';
       }
       break;
     case '>.':
@@ -101,10 +95,9 @@ draw (-> (
     case 'SAVE':
       runP5();
       CONSOLE.value = '';
-      consoleElement.value = '';
       break;
     case 'HELP':
-      // CONSOLE.value = 'ENCODE: encode \nDECODE: \nCLEAR:  \nRESET:';
+      CONSOLE.value = 'ENCODE: encode \nDECODE: \nCLEAR:  \nRESET:';
       break;
     default:
       printErrors(CMD + ' does not exist!');

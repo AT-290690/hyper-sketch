@@ -92,17 +92,7 @@ main {
   /* pointer-events: none; */
   bottom: 0;
 }
-#command {
-  top: 25%;
-  left: 25%;
-  outline: none;
-  height: 50px;
-  width: 50%;
-  resize: none;
-  border: solid 1px var(--border);
-  position: absolute;
-  bottom: 0;
-}
+
 #main-container {
   display: flex;
   justify-content: space-between;
