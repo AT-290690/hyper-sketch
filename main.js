@@ -104,6 +104,7 @@ document.addEventListener('keydown', e => {
       editor.focus();
       State.activeWindow = editorContainer;
     } else if (State.activeWindow === editorContainer) {
+      consoleElement.value = '';
       consoleElement.focus();
     }
   }
